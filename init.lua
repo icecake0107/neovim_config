@@ -161,6 +161,10 @@ vim.o.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.o.scrolloff = 10
 
+vim.opt.textwidth = 110
+
+vim.opt.eol = false
+
 -- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
 -- instead raise a dialog asking if you wish to save the current file(s)
 -- See `:help 'confirm'`
@@ -169,7 +173,7 @@ vim.o.confirm = true
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
-vim.keymap.set('n', '<leader>lg', '<cmd>LazyGit<CR>', { desc = 'Open lazygit' })
+vim.keymap.set('n', '<leader>gg', '<cmd>LazyGit<CR>', { desc = 'Open lazygit' })
 
 -- Buffer operations
 vim.keymap.set('n', '<leader>bd', '<cmd>bdelete<CR>', { desc = '[B]uffer [D]elete' })
@@ -193,9 +197,6 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 -- Terminal toggle using Snacks (configured after plugin loads)
--- vim.keymap.set('n', '<c-/>', function()
---   require("Snacks").terminal()
--- end, { desc = 'Toggle Terminal' })
 vim.keymap.set('t', '<C-/>', '<cmd>close<cr>', { desc = 'Hide Terminal' })
 -- vim.keymap.set('t', '<c-_>', '<cmd>close<cr>', { desc = 'which_key_ignore' })
 
@@ -282,8 +283,22 @@ require('lazy').setup({
     priority = 1000,
     lazy = false,
     opts = {
+
       bigfile = { enabled = true },
-      dashboard = { enabled = true },
+      dashboard = {
+        enabled = true,
+        preset = {
+          header = [[
+     ██████╗ ██████╗ ███████╗ 
+    ██╔═══██╗██╔══██╗╚══███╔╝
+    ██║   ██║██████╔╝  ███╔╝ 
+    ██║   ██║██╔══██╗ ███╔╝  
+    ╚██████╔╝██║  ██║███████╗
+     ╚═════╝ ╚═╝  ╚═╝╚══════╝
+    (ノ-_-)ノ~┻━┻
+        ]],
+        },
+      },
       indent = { enabled = true },
       input = { enabled = true },
       notifier = { enabled = true },

@@ -11,10 +11,12 @@ return {
   },
   lazy = false,
   keys = {
-    { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
+    { '\\', ':Neotree toggle<CR>', desc = 'NeoTree toggle', silent = true },
   },
   opts = {
     filesystem = {
+      bind_to_cwd = true,
+      follow_current_file = { enabled = true },
       window = {
         mappings = {
           ['\\'] = 'close_window',
