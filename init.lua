@@ -174,6 +174,9 @@ vim.keymap.set('n', '<leader>lg', '<cmd>LazyGit<CR>', { desc = 'Open lazygit' })
 -- Buffer operations
 vim.keymap.set('n', '<leader>bd', '<cmd>bdelete<CR>', { desc = '[B]uffer [D]elete' })
 
+-- Save and quit
+vim.keymap.set('n', '<leader>qq', '<cmd>wqa<CR>', { desc = '[Q]uit all (save and quit)' })
+
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
