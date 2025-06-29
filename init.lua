@@ -290,6 +290,17 @@ require('lazy').setup({
   'kdheepak/lazygit.nvim',
   'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
 
+  -- HTTP client for making REST API requests
+  {
+    'mistweaverco/kulala.nvim',
+    ft = 'http',
+    opts = {
+      global_keymaps = true,
+      global_keymaps_prefix = '<leader>R',
+      kulala_keymaps_prefix = '',
+    },
+  },
+
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
   -- keys can be used to configure plugin behavior/loading/etc.
@@ -561,7 +572,7 @@ require('lazy').setup({
       -- and elegantly composed help section, `:help lsp-vs-treesitter`
 
       --  This function gets run when an LSP attaches to a particular buffer.
-      --    That is to say, every time a new file is opened that is associated with
+      --    That is to say, every time a new fole is opened that is associated with
       --    an lsp (for example, opening `main.rs` is associated with `rust_analyzer`) this
       --    function will be executed to configure the current buffer
       vim.api.nvim_create_autocmd('LspAttach', {
@@ -956,60 +967,72 @@ require('lazy').setup({
       sign_priority = 8,
       keywords = {
         FIX = {
-          icon = " ",
-          color = "error",
-          alt = { "FIXME", "BUG", "FIXIT", "ISSUE" },
+          icon = ' ',
+          color = 'error',
+          alt = { 'FIXME', 'BUG', 'FIXIT', 'ISSUE' },
         },
-        TODO = { icon = " ", color = "info" },
-        HACK = { icon = " ", color = "warning" },
-        WARN = { icon = " ", color = "warning", alt = { "WARNING", "XXX" } },
-        PERF = { icon = " ", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
-        NOTE = { icon = " ", color = "hint", alt = { "INFO" } },
-        TEST = { icon = "⏲ ", color = "test", alt = { "TESTING", "PASSED", "FAILED" } },
+        TODO = { icon = ' ', color = 'info' },
+        HACK = { icon = ' ', color = 'warning' },
+        WARN = { icon = ' ', color = 'warning', alt = { 'WARNING', 'XXX' } },
+        PERF = { icon = ' ', alt = { 'OPTIM', 'PERFORMANCE', 'OPTIMIZE' } },
+        NOTE = { icon = ' ', color = 'hint', alt = { 'INFO' } },
+        TEST = { icon = '⏲ ', color = 'test', alt = { 'TESTING', 'PASSED', 'FAILED' } },
       },
       gui_style = {
-        fg = "NONE",
-        bg = "BOLD",
+        fg = 'NONE',
+        bg = 'BOLD',
       },
       merge_keywords = true,
       highlight = {
         multiline = true,
-        multiline_pattern = "^.",
+        multiline_pattern = '^.',
         multiline_context = 10,
-        before = "",
-        keyword = "wide",
-        after = "fg",
+        before = '',
+        keyword = 'wide',
+        after = 'fg',
         pattern = [[.*<(KEYWORDS)\s*:]],
         comments_only = true,
         max_line_len = 400,
         exclude = {},
       },
       colors = {
-        error = { "DiagnosticError", "ErrorMsg", "#DC2626" },
-        warning = { "DiagnosticWarn", "WarningMsg", "#FBBF24" },
-        info = { "DiagnosticInfo", "#2563EB" },
-        hint = { "DiagnosticHint", "#10B981" },
-        default = { "Identifier", "#7C3AED" },
-        test = { "Identifier", "#FF006E" }
+        error = { 'DiagnosticError', 'ErrorMsg', '#DC2626' },
+        warning = { 'DiagnosticWarn', 'WarningMsg', '#FBBF24' },
+        info = { 'DiagnosticInfo', '#2563EB' },
+        hint = { 'DiagnosticHint', '#10B981' },
+        default = { 'Identifier', '#7C3AED' },
+        test = { 'Identifier', '#FF006E' },
       },
       search = {
-        command = "rg",
+        command = 'rg',
         args = {
-          "--color=never",
-          "--no-heading",
-          "--with-filename",
-          "--line-number",
-          "--column",
+          '--color=never',
+          '--no-heading',
+          '--with-filename',
+          '--line-number',
+          '--column',
         },
         pattern = [[\b(KEYWORDS):]],
       },
     },
     keys = {
-      { "]t", function() require("todo-comments").jump_next() end, desc = "Next Todo Comment" },
-      { "[t", function() require("todo-comments").jump_prev() end, desc = "Previous Todo Comment" },
-      { "<leader>xt", "<cmd>Trouble todo toggle<cr>", desc = "Todo (Trouble)" },
-      { "<leader>xT", "<cmd>Trouble todo toggle filter = {tag = {TODO,FIX,FIXME}}<cr>", desc = "Todo/Fix/Fixme (Trouble)" },
-      { "<leader>st", "<cmd>TodoTelescope<cr>", desc = "[S]earch [T]odos" },
+      {
+        ']t',
+        function()
+          require('todo-comments').jump_next()
+        end,
+        desc = 'Next Todo Comment',
+      },
+      {
+        '[t',
+        function()
+          require('todo-comments').jump_prev()
+        end,
+        desc = 'Previous Todo Comment',
+      },
+      { '<leader>xt', '<cmd>Trouble todo toggle<cr>', desc = 'Todo (Trouble)' },
+      { '<leader>xT', '<cmd>Trouble todo toggle filter = {tag = {TODO,FIX,FIXME}}<cr>', desc = 'Todo/Fix/Fixme (Trouble)' },
+      { '<leader>st', '<cmd>TodoTelescope<cr>', desc = '[S]earch [T]odos' },
     },
   },
 
