@@ -170,6 +170,21 @@ vim.opt.eol = false
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
+-- folding
+vim.opt.fillchars = {
+  foldopen = '',
+  foldclose = '',
+  fold = ' ',
+  foldsep = ' ',
+  diff = '╱',
+  eob = ' ',
+}
+vim.opt.foldlevel = 99
+vim.opt.smoothscroll = true
+vim.opt.foldexpr = "v:lua.require'lazyvim.util'.ui.foldexpr()"
+vim.opt.foldmethod = 'expr'
+vim.opt.foldtext = ''
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -261,6 +276,24 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
     error('Error cloning lazy.nvim:\n' .. out)
   end
 end
+
+-- Auto save
+vim.api.nvim_create_autocmd({ 'InsertLeave', 'TextChanged' }, {
+  pattern = { '*' },
+  command = 'silent! wall',
+  nested = true,
+})
+
+-- Create an autocommand for "BufRead" events
+vim.api.nvim_create_autocmd('BufRead', {
+  -- This autocommand will only trigger if the buffer name matches the following patterns
+  pattern = { '*' },
+  -- The autocommand will trigger the following lua function
+  callback = function()
+    vim.opt.eol = true
+    vim.cmd 'set noeol'
+  end,
+})
 
 ---@type vim.Option
 local rtp = vim.opt.rtp
@@ -935,3 +968,4 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
