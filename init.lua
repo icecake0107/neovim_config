@@ -192,37 +192,12 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
--- Toggle terminal in horizontal split
-local function toggle_terminal()
-  local term_bufnr = nil
-  for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
-    if vim.api.nvim_buf_is_loaded(bufnr) and vim.bo[bufnr].buftype == 'terminal' then
-      term_bufnr = bufnr
-      break
-    end
-  end
-
-  if term_bufnr then
-    local term_wins = vim.fn.win_findbuf(term_bufnr)
-    if #term_wins > 0 then
-      -- Terminal is visible, close it
-      vim.api.nvim_win_close(term_wins[1], false)
-    else
-      -- Terminal exists but not visible, show it in split
-      vim.cmd 'split'
-      vim.api.nvim_set_current_buf(term_bufnr)
-      vim.cmd 'startinsert'
-    end
-  else
-    -- No terminal exists, create new one
-    vim.cmd 'split'
-    vim.cmd 'terminal'
-    vim.cmd 'startinsert'
-  end
-end
-
-vim.keymap.set('n', '<C-/>', toggle_terminal, { desc = 'Toggle terminal in horizontal split' })
-vim.keymap.set('t', '<C-/>', toggle_terminal, { desc = 'Toggle terminal in horizontal split' })
+-- Terminal toggle using Snacks (configured after plugin loads)
+vim.keymap.set('n', '<c-/>', function()
+  Snacks.terminal()
+end, { desc = 'Toggle Terminal' })
+vim.keymap.set('t', '<C-/>', '<cmd>close<cr>', { desc = 'Hide Terminal' })
+vim.keymap.set('t', '<c-_>', '<cmd>close<cr>', { desc = 'which_key_ignore' })
 
 -- TIP: Disable arrow keys in normal mode
 -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
@@ -298,6 +273,25 @@ require('lazy').setup({
       global_keymaps = true,
       global_keymaps_prefix = '<leader>R',
       kulala_keymaps_prefix = '',
+    },
+  },
+
+  -- Collection of small QoL plugins
+  {
+    'folke/snacks.nvim',
+    priority = 1000,
+    lazy = false,
+    opts = {
+      bigfile = { enabled = true },
+      dashboard = { enabled = true },
+      indent = { enabled = true },
+      input = { enabled = true },
+      notifier = { enabled = true },
+      quickfile = { enabled = true },
+      scroll = { enabled = true },
+      statuscolumn = { enabled = true },
+      words = { enabled = true },
+      terminal = { enabled = true },
     },
   },
 
