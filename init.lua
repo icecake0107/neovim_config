@@ -193,11 +193,11 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 -- Terminal toggle using Snacks (configured after plugin loads)
-vim.keymap.set('n', '<c-/>', function()
-  Snacks.terminal()
-end, { desc = 'Toggle Terminal' })
+-- vim.keymap.set('n', '<c-/>', function()
+--   require("Snacks").terminal()
+-- end, { desc = 'Toggle Terminal' })
 vim.keymap.set('t', '<C-/>', '<cmd>close<cr>', { desc = 'Hide Terminal' })
-vim.keymap.set('t', '<c-_>', '<cmd>close<cr>', { desc = 'which_key_ignore' })
+-- vim.keymap.set('t', '<c-_>', '<cmd>close<cr>', { desc = 'which_key_ignore' })
 
 -- TIP: Disable arrow keys in normal mode
 -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
@@ -292,6 +292,15 @@ require('lazy').setup({
       statuscolumn = { enabled = true },
       words = { enabled = true },
       terminal = { enabled = true },
+    },
+    keys = {
+      {
+        '<c-/>',
+        function()
+          Snacks.terminal()
+        end,
+        desc = 'Toggle Terminal',
+      },
     },
   },
 
