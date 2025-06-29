@@ -3,4 +3,7 @@
 --
 -- See the kickstart.nvim README for more information
 
-return { require "custom.plugins.lsp" }
+return {
+  require "custom.plugins.lsp",
+  require "custom.plugins.colortheme"
+}

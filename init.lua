@@ -181,6 +181,16 @@ vim.keymap.set('n', '<leader>bd', '<cmd>bdelete<CR>', { desc = '[B]uffer [D]elet
 -- Save and quit
 vim.keymap.set('n', '<leader>qq', '<cmd>wqa<CR>', { desc = '[Q]uit all (save and quit)' })
 
+-- Toggle between color themes
+vim.keymap.set('n', '<leader>ub', function()
+  local current_colorscheme = vim.g.colors_name
+  if current_colorscheme == 'grey' then
+    vim.cmd.colorscheme('tokyonight-night')
+  else
+    vim.cmd.colorscheme('grey')
+  end
+end, { desc = 'Toggle [B]etween color themes' })
+
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
@@ -417,6 +427,7 @@ require('lazy').setup({
         { '<leader>b', group = '[B]uffer' },
         { '<leader>s', group = '[S]earch' },
         { '<leader>t', group = '[T]oggle' },
+        { '<leader>u', group = '[U]I' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
       },
     },
