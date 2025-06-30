@@ -260,6 +260,8 @@ return {
         end,
       },
     }
+
+    require('lspconfig').sourcekit.setup {}
   end,
 }
 
