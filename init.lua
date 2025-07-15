@@ -180,10 +180,28 @@ vim.opt.fillchars = {
   eob = ' ',
 }
 vim.opt.foldlevel = 99
+vim.opt.foldlevelstart = 99
 vim.opt.smoothscroll = true
+vim.opt.foldcolumn = '1' -- '0' is not bad
 vim.opt.foldmethod = 'expr'
-vim.opt.foldexpr = "v:lua.require'lazyvim.util'.ui.foldexpr()"
+vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 vim.opt.foldtext = ''
+
+-- Ensure files open with all folds open by default
+vim.api.nvim_create_autocmd('BufReadPost', {
+  callback = function()
+    -- Set fold level to 99 to ensure all folds are open
+    vim.opt_local.foldlevel = 99
+    vim.opt_local.foldlevelstart = 99
+    
+    -- Also ensure nvim-ufo opens all folds
+    vim.defer_fn(function()
+      if vim.bo.filetype ~= '' then
+        pcall(require('ufo').openAllFolds)
+      end
+    end, 10)
+  end,
+})
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -245,6 +263,29 @@ vim.keymap.set('n', '<S-Up>', '<C-w>+', { desc = 'Increase window height' })
 vim.keymap.set('n', '<S-Down>', '<C-w>-', { desc = 'Decrease window height' })
 vim.keymap.set('n', '<S-Left>', '<C-w><', { desc = 'Decrease window width' })
 vim.keymap.set('n', '<S-Right>', '<C-w>>', { desc = 'Increase window width' })
+
+-- Folding keymaps
+vim.keymap.set('n', 'zR', function()
+  -- Try nvim-ufo first, fallback to default
+  if pcall(require, 'ufo') then
+    require('ufo').openAllFolds()
+  else
+    vim.cmd('normal! zR')
+  end
+end, { desc = 'Open all folds' })
+vim.keymap.set('n', 'zM', function()
+  -- Try nvim-ufo first, fallback to default
+  if pcall(require, 'ufo') then
+    require('ufo').closeAllFolds()
+  else
+    vim.cmd('normal! zM')
+  end
+end, { desc = 'Close all folds' })
+vim.keymap.set('n', 'zr', 'zr', { desc = 'Open one fold level' })
+vim.keymap.set('n', 'zm', 'zm', { desc = 'Close one fold level' })
+vim.keymap.set('n', 'zo', 'zo', { desc = 'Open fold under cursor' })
+vim.keymap.set('n', 'zc', 'zc', { desc = 'Close fold under cursor' })
+vim.keymap.set('n', 'za', 'za', { desc = 'Toggle fold under cursor' })
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
@@ -851,12 +892,9 @@ require('lazy').setup({
       --  - ci'  - [C]hange [I]nside [']quote
       require('mini.ai').setup { n_lines = 500 }
 
-      -- Add/delete/replace surroundings (brackets, quotes, etc.)
-      --
-      -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
-      -- - sd'   - [S]urround [D]elete [']quotes
-      -- - sr)'  - [S]urround [R]eplace [)] [']
-      require('mini.surround').setup()
+      -- Note: mini.surround removed to avoid conflict with <leader>s search keybindings
+      -- If you want text surrounding functionality, consider using a different plugin
+      -- or remapping the mini.surround keys to avoid 's' key conflicts
 
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
@@ -886,13 +924,17 @@ require('lazy').setup({
       ensure_installed = {
         'bash',
         'c',
+        'cpp',
+        'css',
         'diff',
         'html',
         'javascript',
+        'json',
         'lua',
         'luadoc',
         'markdown',
         'markdown_inline',
+        'python',
         'query',
         'typescript',
         'vim',
@@ -916,6 +958,105 @@ require('lazy').setup({
     --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+  },
+
+  -- Better folding support using treesitter and LSP
+  {
+    'kevinhwang91/nvim-ufo',
+    dependencies = {
+      'kevinhwang91/promise-async',
+      'nvim-treesitter/nvim-treesitter',
+    },
+    config = function()
+      -- Tell the server the capability of foldingRange
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      capabilities.textDocument.foldingRange = {
+        dynamicRegistration = false,
+        lineFoldingOnly = true,
+      }
+      
+      -- Custom folding for Vue files to improve script section folding
+      local function customizeSelector(bufnr, filetype, buftype)
+        if filetype == 'vue' then
+          return function(virtText, lnum, endLnum, width, truncate)
+            local newVirtText = {}
+            local suffix = (' 󰁂 %d '):format(endLnum - lnum)
+            local sufWidth = vim.fn.strdisplaywidth(suffix)
+            local targetWidth = width - sufWidth
+            local curWidth = 0
+            for _, chunk in ipairs(virtText) do
+              local chunkText = chunk[1]
+              local chunkWidth = vim.fn.strdisplaywidth(chunkText)
+              if targetWidth > curWidth + chunkWidth then
+                table.insert(newVirtText, chunk)
+              else
+                chunkText = truncate(chunkText, targetWidth - curWidth)
+                local hlGroup = chunk[2]
+                table.insert(newVirtText, {chunkText, hlGroup})
+                chunkWidth = vim.fn.strdisplaywidth(chunkText)
+                if curWidth + chunkWidth < targetWidth then
+                  suffix = suffix .. (' '):rep(targetWidth - curWidth - chunkWidth)
+                end
+                break
+              end
+              curWidth = curWidth + chunkWidth
+            end
+            table.insert(newVirtText, {suffix, 'MoreMsg'})
+            return newVirtText
+          end
+        end
+        return { 'treesitter', 'indent' }
+      end
+      
+      require('ufo').setup({
+        provider_selector = function(bufnr, filetype, buftype)
+          return { 'treesitter', 'indent' }
+        end,
+        open_fold_hl_timeout = 150,
+        close_fold_kinds = {},
+        preview = {
+          win_config = {
+            border = { '', '─', '', '', '', '─', '', '' },
+            winhighlight = 'Normal:Folded',
+            winblend = 0,
+          },
+          mappings = {
+            scrollU = '<C-u>',
+            scrollD = '<C-d>',
+            jumpTop = '[',
+            jumpBot = ']',
+          },
+        },
+      })
+    end,
+  },
+
+  -- Additional Vue support for better syntax highlighting and folding
+  {
+    'posva/vim-vue',
+    ft = 'vue',
+    config = function()
+      -- Configure Vue file support
+      vim.g.vue_pre_processors = 'detect_on_enter'
+      
+      -- Custom folding for Vue files
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = 'vue',
+        callback = function()
+          -- Set up better folding for Vue files while keeping them unfolded by default
+          vim.opt_local.foldmethod = 'syntax'
+          vim.opt_local.foldlevel = 99
+          vim.opt_local.foldlevelstart = 99
+          
+          -- Define custom fold expressions for Vue
+          vim.cmd([[
+            syn region vueTemplate start=+<template+ end=+</template>+ fold transparent keepend extend
+            syn region vueScript start=+<script+ end=+</script>+ fold transparent keepend extend
+            syn region vueStyle start=+<style+ end=+</style>+ fold transparent keepend extend
+          ]])
+        end,
+      })
+    end,
   },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the

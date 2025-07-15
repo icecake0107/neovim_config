@@ -201,7 +201,48 @@ return {
       -- ts_ls = {},
       html={},
       vtsls = {},
-      vue_ls = {},
+      -- Vue language server with improved folding
+      vue_ls = {
+        filetypes = { 'vue' },
+        init_options = {
+          config = {
+            css = {},
+            emmet = {},
+            html = {
+              suggest = {}
+            },
+            javascript = {
+              format = {}
+            },
+            stylusSupremacy = {},
+            typescript = {
+              format = {}
+            },
+            vetur = {
+              completion = {
+                autoImport = true,
+                tagCasing = "kebab",
+                useWorkspaceDependencies = true
+              },
+              format = {
+                defaultFormatter = {
+                  js = "prettier",
+                  ts = "prettier"
+                },
+                defaultFormatterOptions = {},
+                scriptInitialIndent = false,
+                styleInitialIndent = false
+              },
+              useWorkspaceDependencies = true,
+              validation = {
+                script = true,
+                style = true,
+                template = true
+              }
+            }
+          }
+        },
+      },
       -- rust_analyzer = {},
       -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
       --
