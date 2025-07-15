@@ -199,6 +199,7 @@ return {
       pyright = {},
       -- But for many setups, the LSP (`ts_ls`) will work just fine
       -- ts_ls = {},
+      html={},
       vtsls = {},
       vue_ls = {},
       -- rust_analyzer = {},

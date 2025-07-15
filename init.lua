@@ -181,8 +181,8 @@ vim.opt.fillchars = {
 }
 vim.opt.foldlevel = 99
 vim.opt.smoothscroll = true
-vim.opt.foldexpr = "v:lua.require'lazyvim.util'.ui.foldexpr()"
 vim.opt.foldmethod = 'expr'
+vim.opt.foldexpr = "v:lua.require'lazyvim.util'.ui.foldexpr()"
 vim.opt.foldtext = ''
 
 -- [[ Basic Keymaps ]]
