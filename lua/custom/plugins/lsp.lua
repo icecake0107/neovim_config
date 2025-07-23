@@ -197,10 +197,9 @@ return {
       -- clangd = {},
       -- gopls = {},
       pyright = {},
-      -- But for many setups, the LSP (`ts_ls`) will work just fine
       -- ts_ls = {},
       html={},
-      vtsls = {},
+      -- vtsls = {},
       -- Vue language server with improved folding
       vue_ls = {
         filetypes = { 'vue' },

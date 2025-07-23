@@ -182,7 +182,7 @@ vim.opt.fillchars = {
 vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 99
 vim.opt.smoothscroll = true
-vim.opt.foldcolumn = '1' -- '0' is not bad
+vim.opt.foldcolumn = '0' -- '0' is not bad
 vim.opt.foldmethod = 'expr'
 vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 vim.opt.foldtext = ''
@@ -909,6 +909,30 @@ require('lazy').setup({
       ---@diagnostic disable-next-line: duplicate-set-field
       statusline.section_location = function()
         return '%2l:%-2v'
+      end
+
+      -- Add aerial symbol information to statusline
+      ---@diagnostic disable-next-line: duplicate-set-field
+      statusline.section_filename = function()
+        -- Get the default filename section
+        local filename = vim.fn.expand('%:t')
+        if filename == '' then filename = '[No Name]' end
+        
+        -- Get aerial symbol information if available
+        local aerial_info = ''
+        local ok, aerial = pcall(require, 'aerial')
+        if ok then
+          local symbols = aerial.get_location(true)
+          if symbols and #symbols > 0 then
+            local symbol_names = {}
+            for _, symbol in ipairs(symbols) do
+              table.insert(symbol_names, symbol.name)
+            end
+            aerial_info = ' › ' .. table.concat(symbol_names, ' › ')
+          end
+        end
+        
+        return filename .. aerial_info
       end
 
       -- ... and there is more!

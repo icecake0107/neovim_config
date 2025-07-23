@@ -6,5 +6,6 @@
 return {
   require 'custom.plugins.lsp',
   require 'custom.plugins.colortheme',
+  require 'custom.plugins.aerial',
 }
 
