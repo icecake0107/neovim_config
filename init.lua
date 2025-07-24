@@ -441,6 +441,10 @@ require('lazy').setup({
         topdelete = { text = '‾' },
         changedelete = { text = '~' },
       },
+      -- Enable line highlighting for git changes
+      linehl = false, -- Start with line highlighting off, toggle with <leader>tl
+      -- Optionally, you can also add word highlighting
+      word_diff = false, -- Set to true if you want word-level diff highlighting
       on_attach = function(bufnr)
         local gitsigns = require 'gitsigns'
 
@@ -466,6 +470,9 @@ require('lazy').setup({
             gitsigns.nav_hunk 'prev'
           end
         end, { desc = 'Jump to previous git hunk' })
+
+        -- Toggle line highlighting
+        map('n', '<leader>tl', gitsigns.toggle_linehl, { desc = 'Toggle git line highlighting' })
       end,
     },
   },
