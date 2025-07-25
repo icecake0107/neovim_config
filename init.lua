@@ -212,7 +212,16 @@ vim.keymap.set('n', '<leader>gg', '<cmd>LazyGit<CR>', { desc = 'Open lazygit' })
 vim.keymap.set('n', '<leader>bd', '<cmd>bdelete<CR>', { desc = '[B]uffer [D]elete' })
 
 -- Save and quit
-vim.keymap.set('n', '<leader>qq', '<cmd>wqa<CR>', { desc = '[Q]uit all (save and quit)' })
+vim.keymap.set('n', '<leader>qq', function()
+  -- Close all terminal buffers first
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].buftype == 'terminal' then
+      vim.api.nvim_buf_delete(buf, { force = true })
+    end
+  end
+  -- Then save and quit all
+  vim.cmd('wqa')
+end, { desc = '[Q]uit all (save and quit)' })
 
 -- Toggle between color themes
 vim.keymap.set('n', '<leader>ub', function()
