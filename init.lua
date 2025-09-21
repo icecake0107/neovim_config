@@ -267,6 +267,31 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
+-- Window navigation with CTRL + IJKL in all modes
+--  I = up, J = left, K = down, L = right
+--  Note: mapping <C-i> overrides jumplist forward (<Tab>) in normal mode.
+local function map_win_nav(lhs, direction, desc)
+  -- normal/visual
+  vim.keymap.set({ 'n', 'v' }, lhs, function()
+    vim.cmd('wincmd ' .. direction)
+  end, { desc = desc })
+  -- insert: move and resume insert
+  vim.keymap.set('i', lhs, function()
+    vim.cmd('wincmd ' .. direction)
+    vim.cmd 'startinsert'
+  end, { desc = desc })
+  -- terminal: move and resume terminal input
+  vim.keymap.set('t', lhs, function()
+    vim.cmd('wincmd ' .. direction)
+    vim.cmd 'startinsert'
+  end, { desc = desc })
+end
+
+map_win_nav('<C-j>', 'h', 'Move focus to the left window')
+map_win_nav('<C-k>', 'j', 'Move focus to the lower window')
+map_win_nav('<C-i>', 'k', 'Move focus to the upper window')
+map_win_nav('<C-l>', 'l', 'Move focus to the right window')
+
 -- Resize windows with Shift + arrow keys
 vim.keymap.set('n', '<S-Up>', '<C-w>+', { desc = 'Increase window height' })
 vim.keymap.set('n', '<S-Down>', '<C-w>-', { desc = 'Decrease window height' })
@@ -332,6 +357,17 @@ vim.api.nvim_create_autocmd({ 'InsertLeave', 'TextChanged' }, {
   pattern = { '*' },
   command = 'silent! wall',
   nested = true,
+})
+
+-- Auto reload buffers on external file changes
+vim.o.autoread = true
+vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold', 'CursorHoldI', 'TermClose', 'TermLeave' }, {
+  command = 'checktime',
+})
+vim.api.nvim_create_autocmd('FileChangedShellPost', {
+  callback = function()
+    vim.notify('File changed on disk. Buffer reloaded.', vim.log.levels.WARN)
+  end,
 })
 
 -- Create an autocommand for "BufRead" events
