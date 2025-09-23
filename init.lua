@@ -1,89 +1,3 @@
---[[
-
-=====================================================================
-==================== READ THIS BEFORE CONTINUING ====================
-=====================================================================
-========                                    .-----.          ========
-========         .----------------------.   | === |          ========
-========         |.-""""""""""""""""""-.|   |-----|          ========
-========         ||                    ||   | === |          ========
-========         ||   KICKSTART.NVIM   ||   |-----|          ========
-========         ||                    ||   | === |          ========
-========         ||                    ||   |-----|          ========
-========         ||:Tutor              ||   |:::::|          ========
-========         |'-..................-'|   |____o|          ========
-========         `"")----------------(""`   ___________      ========
-========        /::::::::::|  |::::::::::\  \ no mouse \     ========
-========       /:::========|  |==hjkl==:::\  \ required \    ========
-========      '""""""""""""'  '""""""""""""'  '""""""""""'   ========
-========                                                     ========
-=====================================================================
-=====================================================================
-
-What is Kickstart?
-
-  Kickstart.nvim is *not* a distribution.
-
-  Kickstart.nvim is a starting point for your own configuration.
-    The goal is that you can read every line of code, top-to-bottom, understand
-    what your configuration is doing, and modify it to suit your needs.
-
-    Once you've done that, you can start exploring, configuring and tinkering to
-    make Neovim your own! That might mean leaving Kickstart just the way it is for a while
-    or immediately breaking it into modular pieces. It's up to you!
-
-    If you don't know anything about Lua, I recommend taking some time to read through
-    a guide. One possible example which will only take 10-15 minutes:
-      - https://learnxinyminutes.com/docs/lua/
-
-    After understanding a bit more about Lua, you can use `:help lua-guide` as a
-    reference for how Neovim integrates Lua.
-    - :help lua-guide
-    - (or HTML version): https://neovim.io/doc/user/lua-guide.html
-
-Kickstart Guide:
-
-  TODO: The very first thing you should do is to run the command `:Tutor` in Neovim.
-
-    If you don't know what this means, type the following:
-      - <escape key>
-      - :
-      - Tutor
-      - <enter key>
-
-    (If you already know the Neovim basics, you can skip this step.)
-
-  Once you've completed that, you can continue working through **AND READING** the rest
-  of the kickstart init.lua.
-
-  Next, run AND READ `:help`.
-    This will open up a help window with some basic information
-    about reading, navigating and searching the builtin help documentation.
-
-    This should be the first place you go to look when you're stuck or confused
-    with something. It's one of my favorite Neovim features.
-
-    MOST IMPORTANTLY, we provide a keymap "<space>sh" to [s]earch the [h]elp documentation,
-    which is very useful when you're not exactly sure of what you're looking for.
-
-  I have left several `:help X` comments throughout the init.lua
-    These are hints about where to find more information about the relevant settings,
-    plugins or Neovim features used in Kickstart.
-
-   NOTE: Look for lines like this
-
-    Throughout the file. These are for you, the reader, to help you understand what is happening.
-    Feel free to delete them once you know what you're doing, but they should serve as a guide
-    for when you are first encountering a few different constructs in your Neovim config.
-
-If you experience any errors while trying to install kickstart, run `:checkhealth` for more info.
-
-I hope you enjoy your Neovim journey,
-- TJ
-
-P.S. You can delete this when you're done too. It's your config now! :)
---]]
-
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -157,7 +71,8 @@ vim.o.inccommand = 'split'
 
 -- Show which line your cursor is on
 vim.o.cursorline = true
-
+-- Enable vertical cursor column highlight
+vim.opt.cursorcolumn = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.o.scrolloff = 10
 
@@ -193,7 +108,7 @@ vim.api.nvim_create_autocmd('BufReadPost', {
     -- Set fold level to 99 to ensure all folds are open
     vim.opt_local.foldlevel = 99
     vim.opt_local.foldlevelstart = 99
-    
+
     -- Also ensure nvim-ufo opens all folds
     vim.defer_fn(function()
       if vim.bo.filetype ~= '' then
@@ -220,16 +135,19 @@ vim.keymap.set('n', '<leader>qq', function()
     end
   end
   -- Then save and quit all
-  vim.cmd('wqa')
+  vim.cmd 'wqa'
 end, { desc = '[Q]uit all (save and quit)' })
 
 -- Toggle between color themes
 vim.keymap.set('n', '<leader>ub', function()
   local current_colorscheme = vim.g.colors_name
-  if current_colorscheme == 'grey' then
+  if current_colorscheme == 'melange' then
+    vim.o.background = 'dark'
     vim.cmd.colorscheme 'tokyonight-night'
   else
-    vim.cmd.colorscheme 'grey'
+    -- Switch to melange light (latte)
+    vim.o.background = 'light'
+    vim.cmd.colorscheme 'melange'
   end
 end, { desc = 'Toggle [B]etween color themes' })
 
@@ -267,31 +185,6 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
--- Window navigation with CTRL + IJKL in all modes
---  I = up, J = left, K = down, L = right
---  Note: mapping <C-i> overrides jumplist forward (<Tab>) in normal mode.
-local function map_win_nav(lhs, direction, desc)
-  -- normal/visual
-  vim.keymap.set({ 'n', 'v' }, lhs, function()
-    vim.cmd('wincmd ' .. direction)
-  end, { desc = desc })
-  -- insert: move and resume insert
-  vim.keymap.set('i', lhs, function()
-    vim.cmd('wincmd ' .. direction)
-    vim.cmd 'startinsert'
-  end, { desc = desc })
-  -- terminal: move and resume terminal input
-  vim.keymap.set('t', lhs, function()
-    vim.cmd('wincmd ' .. direction)
-    vim.cmd 'startinsert'
-  end, { desc = desc })
-end
-
-map_win_nav('<C-j>', 'h', 'Move focus to the left window')
-map_win_nav('<C-k>', 'j', 'Move focus to the lower window')
-map_win_nav('<C-i>', 'k', 'Move focus to the upper window')
-map_win_nav('<C-l>', 'l', 'Move focus to the right window')
-
 -- Resize windows with Shift + arrow keys
 vim.keymap.set('n', '<S-Up>', '<C-w>+', { desc = 'Increase window height' })
 vim.keymap.set('n', '<S-Down>', '<C-w>-', { desc = 'Decrease window height' })
@@ -304,7 +197,7 @@ vim.keymap.set('n', 'zR', function()
   if pcall(require, 'ufo') then
     require('ufo').openAllFolds()
   else
-    vim.cmd('normal! zR')
+    vim.cmd 'normal! zR'
   end
 end, { desc = 'Open all folds' })
 vim.keymap.set('n', 'zM', function()
@@ -312,7 +205,7 @@ vim.keymap.set('n', 'zM', function()
   if pcall(require, 'ufo') then
     require('ufo').closeAllFolds()
   else
-    vim.cmd('normal! zM')
+    vim.cmd 'normal! zM'
   end
 end, { desc = 'Close all folds' })
 vim.keymap.set('n', 'zr', 'zr', { desc = 'Open one fold level' })
@@ -436,7 +329,11 @@ require('lazy').setup({
       },
       indent = { enabled = true },
       input = { enabled = true },
-      notifier = { enabled = true },
+      notifier = {
+        enabled = true,
+        wo = { wrap = true },
+        timeout = 5000,
+      },
       quickfile = { enabled = true },
       scroll = { enabled = true },
       statuscolumn = { enabled = true },
@@ -450,6 +347,13 @@ require('lazy').setup({
           Snacks.terminal()
         end,
         desc = 'Toggle Terminal',
+      },
+      {
+        '<leader>n',
+        function()
+          Snacks.notifier.show_history()
+        end,
+        desc = 'Notification History',
       },
     },
   },
@@ -993,9 +897,11 @@ require('lazy').setup({
       ---@diagnostic disable-next-line: duplicate-set-field
       statusline.section_filename = function()
         -- Get the default filename section
-        local filename = vim.fn.expand('%:t')
-        if filename == '' then filename = '[No Name]' end
-        
+        local filename = vim.fn.expand '%:t'
+        if filename == '' then
+          filename = '[No Name]'
+        end
+
         -- Get aerial symbol information if available
         local aerial_info = ''
         local ok, aerial = pcall(require, 'aerial')
@@ -1009,7 +915,7 @@ require('lazy').setup({
             aerial_info = ' › ' .. table.concat(symbol_names, ' › ')
           end
         end
-        
+
         return filename .. aerial_info
       end
 
@@ -1076,7 +982,7 @@ require('lazy').setup({
         dynamicRegistration = false,
         lineFoldingOnly = true,
       }
-      
+
       -- Custom folding for Vue files to improve script section folding
       local function customizeSelector(bufnr, filetype, buftype)
         if filetype == 'vue' then
@@ -1094,7 +1000,7 @@ require('lazy').setup({
               else
                 chunkText = truncate(chunkText, targetWidth - curWidth)
                 local hlGroup = chunk[2]
-                table.insert(newVirtText, {chunkText, hlGroup})
+                table.insert(newVirtText, { chunkText, hlGroup })
                 chunkWidth = vim.fn.strdisplaywidth(chunkText)
                 if curWidth + chunkWidth < targetWidth then
                   suffix = suffix .. (' '):rep(targetWidth - curWidth - chunkWidth)
@@ -1103,14 +1009,14 @@ require('lazy').setup({
               end
               curWidth = curWidth + chunkWidth
             end
-            table.insert(newVirtText, {suffix, 'MoreMsg'})
+            table.insert(newVirtText, { suffix, 'MoreMsg' })
             return newVirtText
           end
         end
         return { 'treesitter', 'indent' }
       end
-      
-      require('ufo').setup({
+
+      require('ufo').setup {
         provider_selector = function(bufnr, filetype, buftype)
           return { 'treesitter', 'indent' }
         end,
@@ -1129,7 +1035,7 @@ require('lazy').setup({
             jumpBot = ']',
           },
         },
-      })
+      }
     end,
   },
 
@@ -1140,7 +1046,7 @@ require('lazy').setup({
     config = function()
       -- Configure Vue file support
       vim.g.vue_pre_processors = 'detect_on_enter'
-      
+
       -- Custom folding for Vue files
       vim.api.nvim_create_autocmd('FileType', {
         pattern = 'vue',
@@ -1149,13 +1055,13 @@ require('lazy').setup({
           vim.opt_local.foldmethod = 'syntax'
           vim.opt_local.foldlevel = 99
           vim.opt_local.foldlevelstart = 99
-          
+
           -- Define custom fold expressions for Vue
-          vim.cmd([[
+          vim.cmd [[
             syn region vueTemplate start=+<template+ end=+</template>+ fold transparent keepend extend
             syn region vueScript start=+<script+ end=+</script>+ fold transparent keepend extend
             syn region vueStyle start=+<style+ end=+</style>+ fold transparent keepend extend
-          ]])
+          ]]
         end,
       })
     end,
