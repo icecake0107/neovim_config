@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENT.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to AI coding assistants when working with code in this repository.
 
 ## Repository Overview
 
@@ -12,7 +12,9 @@ This is a Neovim configuration based on kickstart.nvim - a starting point for Ne
 - **`init.lua`**: Main configuration file containing all core settings, keymaps, and plugin specifications
 - **`lua/custom/plugins/`**: User-defined plugins that extend the base configuration
   - `lsp.lua`: LSP configuration with Mason for auto-installation
-  - `colortheme.lua`: Additional color theme (nvim-grey)
+  - `colortheme.lua`: Additional color themes (melange, catppuccin)
+  - `aerial.lua`: Code outline and symbol navigation
+  - `opencode.lua`: AI coding assistant integration
   - `init.lua`: Imports all custom plugins
 - **`lua/kickstart/`**: Base kickstart plugins (optional additions)
 - **`lazy-lock.json`**: Plugin version lock file managed by Lazy.nvim
@@ -29,7 +31,10 @@ This is a Neovim configuration based on kickstart.nvim - a starting point for Ne
 - **LSP**: Comprehensive setup with Mason for auto-installation, including Volar for Vue files
 - **Autocompletion**: Uses blink.cmp with LuaSnip
 - **Fuzzy Finding**: Telescope for files, grep, and LSP symbols
-- **Color Themes**: Tokyo Night (default) with toggle to grey theme (`<leader>ub`)
+- **Color Themes**: Tokyo Night (default) with toggle to Melange theme (`<leader>ub`)
+- **Code Outline**: Aerial.nvim for navigating code structure and symbols
+- **HTTP Client**: Kulala.nvim for making REST API requests
+- **AI Assistant**: OpenCode.nvim integration for AI-powered coding assistance
 
 ## Common Commands
 
@@ -44,12 +49,50 @@ This is a Neovim configuration based on kickstart.nvim - a starting point for Ne
 - Mason auto-installs: `stylua`, `eslint`, `prettierd` + configured LSP servers
 
 ### Key Mappings
+
+#### General
 - `<leader>f` - Format buffer with conform.nvim
 - `<leader>gg` - Open LazyGit
 - `<leader>qq` - Save and quit all buffers
 - `<leader>bd` - Delete current buffer
-- `<leader>ub` - Toggle between Tokyo Night and grey themes
+- `<leader>ub` - Toggle between Tokyo Night and Melange themes
 - `<C-/>` - Toggle terminal (Snacks.terminal)
+- `<leader>n` - Show notification history
+- `<leader>q` - Open diagnostic quickfix list
+
+#### Window Management
+- `<C-h/j/k/l>` - Move focus between windows
+- `<S-Up/Down/Left/Right>` - Resize windows
+
+#### Aerial (Code Outline)
+- `<leader>a` - Toggle Aerial outline window
+- `<leader>an` - Toggle Aerial navigation window
+- `<leader>ao` - Open all Aerial folds
+- `<leader>ac` - Close all Aerial folds
+- `{` / `}` - Jump to previous/next symbol (when Aerial attached)
+
+#### OpenCode (AI Assistant)
+- `<leader>oA` - Ask opencode (custom prompt)
+- `<leader>oa` - Ask opencode about cursor position (normal) / selection (visual)
+- `<leader>ot` - Toggle embedded opencode terminal
+- `<leader>on` - New opencode session
+- `<leader>oy` - Copy last message
+- `<leader>op` - Select prompt template
+- `<leader>oe` - Explain code near cursor
+- `<S-C-u>` / `<S-C-d>` - Scroll opencode messages
+
+#### Kulala (HTTP Client)
+- `<leader>R*` - Various HTTP request operations (when in `.http` files)
+
+#### Git Operations
+- `]g` / `[g` - Jump to next/previous git hunk
+- `<leader>tl` - Toggle git line highlighting
+
+#### Todo Comments
+- `]t` / `[t` - Jump to next/previous todo comment
+- `<leader>st` - Search todos with Telescope
+- `<leader>xt` - View todos in Trouble
+- `<leader>xT` - View TODO/FIX/FIXME in Trouble
 
 ### Folding Commands
 - `zR` - Open all folds
@@ -73,6 +116,8 @@ This is a Neovim configuration based on kickstart.nvim - a starting point for Ne
 - `<leader>sd` - Search diagnostics
 - `<leader>s.` - Search recent files
 - `<leader>s/` - Search in open files
+- `<leader>/` - Fuzzy search in current buffer
+- `<leader><leader>` - Find existing buffers
 
 ### LSP Keybindings (when LSP is attached)
 - `grn` - Rename symbol
@@ -116,12 +161,17 @@ Currently configured LSP servers:
 ## File Organization
 
 ### Core Files
-- `init.lua` - Main configuration (970+ lines)
+- `init.lua` - Main configuration (1120 lines)
 - `lazy-lock.json` - Plugin versions
 - `README.md` - Installation and usage instructions
 
 ### Custom Extensions
 - `lua/custom/plugins/` - User plugins
+  - `lsp.lua` - LSP configuration
+  - `colortheme.lua` - Additional themes (melange, catppuccin)
+  - `aerial.lua` - Code outline viewer
+  - `opencode.lua` - AI assistant integration
+  - `init.lua` - Plugin loader
 - `lua/kickstart/plugins/` - Optional kickstart plugins
 
 ### Auto-generated
@@ -133,9 +183,14 @@ Currently configured LSP servers:
 - Configuration follows kickstart.nvim philosophy: readable, documented, educational
 - Format-on-save is disabled by default (can be enabled in conform.nvim config)
 - Auto-save is enabled for all file changes
-- No relative line numbers by default (can be enabled)
+- **Relative line numbers enabled** by default
 - Nerd Font support is configurable via `vim.g.have_nerd_font`
 - **nvim-ufo plugin**: Provides advanced folding using LSP and treesitter for improved code folding
 - **vim-vue plugin**: Adds enhanced Vue.js support with better syntax highlighting and folding for single-file components
 - **Enhanced Vue folding**: Combines nvim-ufo, vim-vue, and improved vue_ls configuration for better Vue Composition API folding
 - **Search-optimized keybindings**: Removed mini.surround to avoid conflicts with `<leader>s` search commands
+- **Aerial integration**: Code outline viewer integrated into statusline showing current symbol context
+- **Auto-reload**: Buffers automatically reload when files change externally
+- **Cursor enhancements**: Both cursorline and cursorcolumn highlighting enabled
+- **Smooth scrolling**: Enabled for better visual experience
+- **Files open unfolded**: All folds are automatically opened when files are loaded
