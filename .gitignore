@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Compiled Lua sources
 luac.out
 
@@ -39,3 +40,12 @@ luac.out
 *.x86_64
 *.hex
 
+=======
+tags
+test.sh
+.luarc.json
+nvim
+
+spell/
+lazy-lock.json
+>>>>>>> nvim_native_lsp
