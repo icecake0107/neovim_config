@@ -44,3 +44,16 @@ vim.keymap.set('n', '<leader>qq', function()
 end, { desc = '[Q]uit all (save and quit)' })
 
 vim.keymap.set('n', '<leader>gg', '<cmd>LazyGit<CR>', { desc = 'Open lazygit' })
+
+-- Toggle between color themes
+vim.keymap.set('n', '<leader>ub', function()
+  local current_colorscheme = vim.g.colors_name
+  if current_colorscheme == 'melange' then
+    vim.o.background = 'dark'
+    vim.cmd.colorscheme 'tokyonight-night'
+  else
+    -- Switch to melange light (latte)
+    vim.o.background = 'light'
+    vim.cmd.colorscheme 'tokyonight-day'
+  end
+end, { desc = 'Toggle [B]etween color themes' })
