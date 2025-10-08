@@ -20,6 +20,7 @@ vim.keymap.set({ 'n', 'x' }, '<leader>p', '"+p', { desc = 'Paste from system cli
 vim.keymap.set({ 'n', 'x' }, '<leader>P', '"+P', { desc = 'Paste from system clipboard before the cursor position' })
 
 -- Navigating buffers
+vim.keymap.set('n', '<leader>bd', '<cmd>bdelete<CR>', { desc = '[B]uffer [D]elete' })
 vim.keymap.set('n', '<leader>bb', '<C-^>', { desc = 'Switch to alternate buffer' })
 vim.keymap.set('n', '<leader>bn', ':bnext<cr>', { desc = 'Next buffer' })
 vim.keymap.set('n', '<leader>bp', ':bprevious<cr>', { desc = 'Previous buffer' })
@@ -95,3 +96,4 @@ vim.keymap.set('n', 'zm', 'zm', { desc = 'Close one fold level' })
 vim.keymap.set('n', 'zo', 'zo', { desc = 'Open fold under cursor' })
 vim.keymap.set('n', 'zc', 'zc', { desc = 'Close fold under cursor' })
 vim.keymap.set('n', 'za', 'za', { desc = 'Toggle fold under cursor' })
+
