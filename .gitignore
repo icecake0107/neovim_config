@@ -46,3 +46,4 @@ test.sh
 spell/
 lazy-lock.json
 .stylelua.toml
+.DS_Store
