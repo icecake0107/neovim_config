@@ -1,0 +1,23 @@
+---@brief
+---
+--- https://github.com/vuejs/language-tools/tree/master/packages/language-server
+--- The up to date guide
+--- https://github.com/vuejs/language-tools/wiki/Neovim
+---
+--- The official language server for Vue
+---
+--- It can be installed via npm:
+--- ```sh
+--- npm install -g @vue/language-server
+--- ```
+---
+--- The language server only supports Vue 3 projects by default.
+--- For Vue 2 projects, [additional configuration](https://github.com/vuejs/language-tools/blob/master/extensions/vscode/README.md?plain=1#L19) are required.
+---
+--- The Vue language server works in "hybrid mode" that exclusively manages the CSS/HTML sections.
+--- You need the `vtsls` server with the `@vue/typescript-plugin` plugin to support TypeScript in `.vue` files.
+--- See `vtsls` section and https://github.com/vuejs/language-tools/wiki/Neovim for more information.
+---
+--- NOTE: Since v3.0.0, the Vue Language Server [no longer supports takeover mode](https://github.com/vuejs/language-tools/pull/5248).
+
+return {}
