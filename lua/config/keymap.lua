@@ -97,3 +97,15 @@ vim.keymap.set('n', 'zo', 'zo', { desc = 'Open fold under cursor' })
 vim.keymap.set('n', 'zc', 'zc', { desc = 'Close fold under cursor' })
 vim.keymap.set('n', 'za', 'za', { desc = 'Toggle fold under cursor' })
 
+-- Github Copilot
+vim.keymap.set('n', '<M-c>', function()
+  -- Toggle Copilot
+  if vim.g.copilot_enabled == true then
+    vim.g.copilot_enabled = false
+    print('Copilot Disabled')
+  else
+    vim.g.copilot_enabled = true
+    print('Copilot Enabled')
+  end
+  vim.cmd 'redrawstatus'
+end, { desc = 'Toggle GitHub [C]opilot' })

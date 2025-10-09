@@ -8,7 +8,7 @@ return  { -- Collection of various small independent plugins/modules
       --  - yinq - [Y]ank [I]nside [N]ext [Q]uote
       --  - ci'  - [C]hange [I]nside [']quote
       require('mini.ai').setup { n_lines = 500 }
-   local statusline = require 'mini.statusline'
+      local statusline = require 'mini.statusline'
       -- set use_icons to true if you have a Nerd Font
       statusline.setup { use_icons = vim.g.have_nerd_font }
 
@@ -44,6 +44,33 @@ return  { -- Collection of various small independent plugins/modules
         end
 
         return filename .. aerial_info
+      end
+
+      local default_section_fileinfo = statusline.section_fileinfo
+      statusline.section_fileinfo = function(...)
+        local fileinfo = default_section_fileinfo(...)
+
+        local function is_copilot_enabled()
+          local value = vim.g.copilot_enabled
+          if type(value) == 'boolean' then
+            return value
+          elseif type(value) == 'number' then
+            return value ~= 0
+          elseif type(value) == 'string' then
+            local lowered = value:lower()
+            return lowered ~= '0' and lowered ~= 'false'
+          end
+          return false
+        end
+
+        local icon = vim.g.have_nerd_font and '' or 'Copilot'
+        local indicator = string.format('%s %s', icon, is_copilot_enabled() and 'ON' or 'OFF')
+
+        if fileinfo ~= '' then
+          return string.format('%s %s', indicator, fileinfo)
+        end
+
+        return indicator
       end
 
       -- ... and there is more!
