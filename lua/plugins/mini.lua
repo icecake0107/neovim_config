@@ -12,6 +12,28 @@ return  { -- Collection of various small independent plugins/modules
       -- set use_icons to true if you have a Nerd Font
       statusline.setup { use_icons = vim.g.have_nerd_font }
 
+      local copilot_hl_group = vim.api.nvim_create_augroup('MiniStatuslineCopilot', { clear = true })
+      local function apply_copilot_highlights()
+        local is_light = vim.o.background == 'light'
+        if is_light then
+          vim.api.nvim_set_hl(0, 'MiniStatuslineCopilotOn', { fg = '#0c1117', bg = '#6fdd8b', bold = true })
+          vim.api.nvim_set_hl(0, 'MiniStatuslineCopilotOff', { fg = '#0c1117', bg = '#c9ccd1' })
+        else
+          vim.api.nvim_set_hl(0, 'MiniStatuslineCopilotOn', { fg = '#0c1117', bg = '#3fb950', bold = true })
+          vim.api.nvim_set_hl(0, 'MiniStatuslineCopilotOff', { fg = '#0c1117', bg = '#6e7681' })
+        end
+      end
+      apply_copilot_highlights()
+      vim.api.nvim_create_autocmd('ColorScheme', {
+        group = copilot_hl_group,
+        callback = apply_copilot_highlights,
+      })
+      vim.api.nvim_create_autocmd('OptionSet', {
+        group = copilot_hl_group,
+        pattern = 'background',
+        callback = apply_copilot_highlights,
+      })
+
       -- You can configure sections in the statusline by overriding their
       -- default behavior. For example, here we set the section for
       -- cursor location to LINE:COLUMN
@@ -64,7 +86,9 @@ return  { -- Collection of various small independent plugins/modules
         end
 
         local icon = vim.g.have_nerd_font and '' or 'Copilot'
-        local indicator = string.format('%s %s', icon, is_copilot_enabled() and 'ON' or 'OFF')
+        local enabled = is_copilot_enabled()
+        local indicator_text = string.format('%s %s', icon, enabled and 'ON' or 'OFF')
+        local indicator = string.format('%%#%s# %s %%#MiniStatuslineFileinfo#', enabled and 'MiniStatuslineCopilotOn' or 'MiniStatuslineCopilotOff', indicator_text)
 
         if fileinfo ~= '' then
           return string.format('%s %s', indicator, fileinfo)
