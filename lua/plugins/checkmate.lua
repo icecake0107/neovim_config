@@ -6,7 +6,7 @@ return {
     keys = false,
     todo_states = {
       -- Built-in states (cannot change markdown or type)
-      unchecked = { marker = '🔳' },
+      unchecked = { marker = '' },
       checked = { marker = '✅' },
 
       -- Custom states
