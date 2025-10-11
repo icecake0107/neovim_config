@@ -102,25 +102,29 @@ vim.keymap.set('n', '<M-c>', function()
   -- Toggle Copilot
   if vim.g.copilot_enabled == true then
     vim.g.copilot_enabled = false
-    print('Copilot Disabled')
+    print 'Copilot Disabled'
   else
     vim.g.copilot_enabled = true
-    print('Copilot Enabled')
+    print 'Copilot Enabled'
   end
   vim.cmd 'redrawstatus'
 end, { desc = 'Toggle GitHub [C]opilot' })
 
 -- Checkmate.nvim keys
-vim.keymap.set({'n'}, '<leader>ta', '<cmd>Checkmate archive<CR>', { desc = 'Archive checked/completed todo items (move to bottom section)' })
-vim.keymap.set({'n', 'v'}, '<leader>tc', '<cmd>Checkmate check<CR>', { desc = 'Set todo item as checked (done)' })
-vim.keymap.set({'n', 'v'}, '<leader>tC', '<cmd>Checkmate uncheck<CR>', { desc = 'Set todo item as unchecked' })
-vim.keymap.set({'n', 'v'}, '<leader>tn', '<cmd>Checkmate create<CR>', { desc = 'Create todo item' })
-vim.keymap.set({'n', 'v'}, '<leader>tr', '<cmd>Checkmate remove<CR>', { desc = 'Remove todo marker (convert to text)' })
-vim.keymap.set({'n', 'v'}, '<leader>tt', '<cmd>Checkmate toggle<CR>', { desc = 'Toggle todo item' })
-vim.keymap.set({'n', 'v'}, '<leader>tsp', '<cmd>Checkmate toggle on_hold<CR>', { desc = 'Set on hold status' })
-vim.keymap.set({'n', 'v'}, '<leader>tsi', '<cmd>Checkmate toggle in_progress<CR>', { desc = 'Set in progress status' })
-vim.keymap.set({'n', 'v'}, '<leader>tsx', '<cmd>Checkmate toggle cancelled<CR>', { desc = 'Set canceled status' })
-vim.keymap.set({'n'}, '<leader>tv', '<cmd>Checkmate metadata select_value<CR>', { desc = 'Update the value of a metadata tag under the cursor' })
-vim.keymap.set({'n'}, '<leader>t]', '<cmd>Checkmate metadata jump_next<CR>', { desc = 'Move cursor to next metadata tag' })
-vim.keymap.set({'n'}, '<leader>t[', '<cmd>Checkmate metadata jump_previous<CR>', { desc = 'Move cursor to previous metadata tag' })
+vim.keymap.set({ 'n' }, '<leader>ta', '<cmd>Checkmate archive<CR>', { desc = 'Archive checked/completed todo items (move to bottom section)' })
+vim.keymap.set({ 'n', 'v' }, '<leader>tc', '<cmd>Checkmate check<CR>', { desc = 'Set todo item as checked (done)' })
+vim.keymap.set({ 'n', 'v' }, '<leader>tC', '<cmd>Checkmate uncheck<CR>', { desc = 'Set todo item as unchecked' })
+vim.keymap.set({ 'n', 'v' }, '<leader>tn', '<cmd>Checkmate create<CR>', { desc = 'Create todo item' })
+vim.keymap.set({ 'n', 'v' }, '<leader>tr', '<cmd>Checkmate remove<CR>', { desc = 'Remove todo marker (convert to text)' })
+vim.keymap.set({ 'n', 'v' }, '<leader>tt', '<cmd>Checkmate toggle<CR>', { desc = 'Toggle todo item' })
+-- Toogle status
+vim.keymap.set({ 'n', 'v' }, '<leader>tsp', '<cmd>Checkmate toggle on_hold<CR>', { desc = 'Set on hold status' })
+vim.keymap.set({ 'n', 'v' }, '<leader>tsi', '<cmd>Checkmate toggle in_progress<CR>', { desc = 'Set in progress status' })
+vim.keymap.set({ 'n', 'v' }, '<leader>tsx', '<cmd>Checkmate toggle cancelled<CR>', { desc = 'Set canceled status' })
+-- Metadata
+vim.keymap.set({ 'n' }, '<leader>tv', '<cmd>Checkmate metadata select_value<CR>', { desc = 'Update the value of a metadata tag under the cursor' })
+vim.keymap.set({ 'n' }, '<leader>t]', '<cmd>Checkmate metadata jump_next<CR>', { desc = 'Move cursor to next metadata tag' })
+vim.keymap.set({ 'n' }, '<leader>t[', '<cmd>Checkmate metadata jump_previous<CR>', { desc = 'Move cursor to previous metadata tag' })
+-- Quick open my work todo.md from Obsidian
+vim.keymap.set({ 'n' }, '<leader>tow', '<cmd>vsplit ~/Documents/obsidian/Work/todo.md<CR>', { desc = 'Open my workd todo in Obsidian' })
 
