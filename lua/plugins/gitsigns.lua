@@ -39,7 +39,7 @@
         end, { desc = 'Jump to previous git hunk' })
 
         -- Toggle line highlighting
-        map('n', '<leader>tl', gitsigns.toggle_linehl, { desc = 'Toggle git line highlighting' })
+        map('n', '<leader>gl', gitsigns.toggle_linehl, { desc = 'Toggle git line highlighting' })
       end,
     },
   }
