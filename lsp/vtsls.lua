@@ -65,48 +65,71 @@
 ---
 --- It is recommended to use the same version of TypeScript in all packages, and therefore have it available in your workspace root. The location of the TypeScript binary will be determined automatically, but only once.
 local vue_plugin = {
-  name = '@vue/typescript-plugin',
-  location = '/opt/homebrew/bin/vue-language-server',
-  languages = { 'vue' },
-  configNamespace = 'typescript',
+    name = '@vue/typescript-plugin',
+    location = '/opt/homebrew/bin/vue-language-server',
+    languages = { 'vue' },
+    configNamespace = 'typescript',
 }
 return {
-
-  cmd = { 'vtsls', '--stdio' },
-  init_options = {
-    hostInfo = 'neovim',
-  },
-  filetypes = {
-    'javascript',
-    'javascriptreact',
-    'javascript.jsx',
-    'typescript',
-    'typescriptreact',
-    'typescript.tsx',
-    'vue'
-  },
-  root_dir = function(bufnr, on_dir)
-    -- The project root is where the LSP can be started from
-    -- As stated in the documentation above, this LSP supports monorepos and simple projects.
-    -- We select then from the project root, which is identified by the presence of a package
-    -- manager lock file.
-    local root_markers = { 'package-lock.json', 'yarn.lock', 'pnpm-lock.yaml', 'bun.lockb', 'bun.lock' }
-    -- Give the root markers equal priority by wrapping them in a table
-    root_markers = vim.fn.has('nvim-0.11.3') == 1 and { root_markers, { '.git' } }
-        or vim.list_extend(root_markers, { '.git' })
-    -- We fallback to the current working directory if no project root is found
-    local project_root = vim.fs.root(bufnr, root_markers) or vim.fn.getcwd()
-
-    on_dir(project_root)
-  end,
-
-  settings = {
-    vtsls = {
-      tsserver = {
-        globalPlugins = {
-          vue_plugin,
-        },
-      },
+    cmd = { 'vtsls', '--stdio' },
+    init_options = {
+        hostInfo = 'neovim',
     },
-  },
+    filetypes = {
+        'javascript',
+        'javascriptreact',
+        'javascript.jsx',
+        'typescript',
+        'typescriptreact',
+        'typescript.tsx',
+        'vue'
+    },
+    root_dir = function(bufnr, on_dir)
+        -- The project root is where the LSP can be started from
+        -- As stated in the documentation above, this LSP supports monorepos and simple projects.
+        -- We select then from the project root, which is identified by the presence of a package
+        -- manager lock file.
+        local root_markers = { 'package-lock.json', 'yarn.lock', 'pnpm-lock.yaml', 'bun.lockb', 'bun.lock' }
+        -- Give the root markers equal priority by wrapping them in a table
+        root_markers = vim.fn.has('nvim-0.11.3') == 1 and { root_markers, { '.git' } }
+            or vim.list_extend(root_markers, { '.git' })
+        -- We fallback to the current working directory if no project root is found
+        local project_root = vim.fs.root(bufnr, root_markers) or vim.fn.getcwd()
+
+        on_dir(project_root)
+    end,
+
+    settings = {
+        complete_function_calls = true,
+        vtsls = {
+            tsserver = {
+                globalPlugins = {
+                    vue_plugin,
+                },
+            },
+            enableMoveToFileCodeAction = true,
+            autoUseWorkspaceTsdk = true,
+            experimental = {
+                maxInlayHintLength = 30,
+                completion = {
+                    enableServerSideFuzzyMatch = true,
+                },
+            },
+        },
+        typescript = {
+            updateImportsOnFileMove = { enabled = "always" },
+            suggest = {
+                completeFunctionCalls = true,
+            },
+            inlayHints = {
+                enumMemberValues = { enabled = true },
+                functionLikeReturnTypes = { enabled = true },
+                parameterNames = { enabled = "literals" },
+                parameterTypes = { enabled = true },
+                propertyDeclarationTypes = { enabled = true },
+                variableTypes = { enabled = false },
+            },
+        },
+    },
 }
+

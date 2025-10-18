@@ -128,3 +128,7 @@ vim.keymap.set({ 'n' }, '<leader>t[', '<cmd>Checkmate metadata jump_previous<CR>
 -- Quick open my work todo.md from Obsidian
 vim.keymap.set({ 'n' }, '<leader>tow', '<cmd>vsplit ~/Documents/obsidian/Work/todo.md<CR>', { desc = 'Open my workd todo in Obsidian' })
 
+vim.keymap.set('n', '<leader>f', function()
+  vim.lsp.buf.format({ async = true })
+end, {desc='[F]ormat buffer'})
+vim.keymap.set("i", "<C-space>", vim.lsp.completion.get, { desc = "Trigger autocompletion" })
