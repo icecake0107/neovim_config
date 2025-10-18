@@ -55,6 +55,30 @@ return {
         end,
         sort_order = 30,
       },
+      priority = {
+        style = function(context)
+          local value = context.value:lower()
+          if value == 'high' then
+            return { fg = '#ff5555', bold = true }
+          elseif value == 'medium' then
+            return { fg = '#ffb86c' }
+          elseif value == 'low' then
+            return { fg = '#8be9fd' }
+          else -- fallback
+            return { fg = '#8be9fd' }
+          end
+        end,
+        get_value = function()
+          return 'medium' -- Default priority
+        end,
+        choices = function()
+          return { 'low', 'medium', 'high' }
+        end,
+        key = '<leader>tmp',
+        sort_order = 10,
+        jump_to_on_insert = 'value',
+        select_on_insert = true,
+      },
     },
     -- files = { "*.md" }, -- any .md file (instead of defaults)
   },
