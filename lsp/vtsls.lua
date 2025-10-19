@@ -66,7 +66,7 @@
 --- It is recommended to use the same version of TypeScript in all packages, and therefore have it available in your workspace root. The location of the TypeScript binary will be determined automatically, but only once.
 local vue_plugin = {
     name = '@vue/typescript-plugin',
-    location = '/opt/homebrew/bin/vue-language-server',
+    location = '/home/users/junzhil/.n/lib/node_modules/@vue/language-server',
     languages = { 'vue' },
     configNamespace = 'typescript',
 }
@@ -89,10 +89,7 @@ return {
         -- As stated in the documentation above, this LSP supports monorepos and simple projects.
         -- We select then from the project root, which is identified by the presence of a package
         -- manager lock file.
-        local root_markers = { 'package-lock.json', 'yarn.lock', 'pnpm-lock.yaml', 'bun.lockb', 'bun.lock' }
-        -- Give the root markers equal priority by wrapping them in a table
-        root_markers = vim.fn.has('nvim-0.11.3') == 1 and { root_markers, { '.git' } }
-            or vim.list_extend(root_markers, { '.git' })
+        local root_markers = { 'package-lock.json', 'yarn.lock', 'pnpm-lock.yaml', 'bun.lockb', 'bun.lock', '.git' }
         -- We fallback to the current working directory if no project root is found
         local project_root = vim.fs.root(bufnr, root_markers) or vim.fn.getcwd()
 
