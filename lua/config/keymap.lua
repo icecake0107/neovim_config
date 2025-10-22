@@ -34,29 +34,27 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Save and quit
 vim.keymap.set('n', '<leader>qq', function()
-  -- Close all terminal buffers first
-  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-    if vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].buftype == 'terminal' then
-      vim.api.nvim_buf_delete(buf, { force = true })
+    -- Close all terminal buffers first
+    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+        if vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].buftype == 'terminal' then
+            vim.api.nvim_buf_delete(buf, { force = true })
+        end
     end
-  end
-  -- Then save and quit all
-  vim.cmd 'wqa'
+    -- Then save and quit all
+    vim.cmd 'wqa'
 end, { desc = '[Q]uit all (save and quit)' })
 
 vim.keymap.set('n', '<leader>gg', '<cmd>LazyGit<CR>', { desc = 'Open lazygit' })
 
 -- Toggle between color themes
 vim.keymap.set('n', '<leader>ub', function()
-  local current_colorscheme = vim.g.colors_name
-  if current_colorscheme == 'tokyonight-day' then
-    vim.o.background = 'dark'
-    vim.cmd.colorscheme 'tokyonight-night'
-  else
-    -- Switch to melange light (latte)
-    vim.o.background = 'light'
-    vim.cmd.colorscheme 'tokyonight-day'
-  end
+    local current_colorscheme = vim.g.colors_name
+    if vim.o.background == 'light' then
+        vim.o.background = 'dark'
+    else
+        -- Switch to melange light (latte)
+        vim.o.background = 'light'
+    end
 end, { desc = 'Toggle [B]etween color themes' })
 
 -- Keybinds to make split navigation easier.
@@ -76,20 +74,20 @@ vim.keymap.set('n', '<S-Right>', '<C-w>>', { desc = 'Increase window width' })
 
 -- Folding keymaps
 vim.keymap.set('n', 'zR', function()
-  -- Try nvim-ufo first, fallback to default
-  if pcall(require, 'ufo') then
-    require('ufo').openAllFolds()
-  else
-    vim.cmd 'normal! zR'
-  end
+    -- Try nvim-ufo first, fallback to default
+    if pcall(require, 'ufo') then
+        require('ufo').openAllFolds()
+    else
+        vim.cmd 'normal! zR'
+    end
 end, { desc = 'Open all folds' })
 vim.keymap.set('n', 'zM', function()
-  -- Try nvim-ufo first, fallback to default
-  if pcall(require, 'ufo') then
-    require('ufo').closeAllFolds()
-  else
-    vim.cmd 'normal! zM'
-  end
+    -- Try nvim-ufo first, fallback to default
+    if pcall(require, 'ufo') then
+        require('ufo').closeAllFolds()
+    else
+        vim.cmd 'normal! zM'
+    end
 end, { desc = 'Close all folds' })
 vim.keymap.set('n', 'zr', 'zr', { desc = 'Open one fold level' })
 vim.keymap.set('n', 'zm', 'zm', { desc = 'Close one fold level' })
@@ -99,19 +97,20 @@ vim.keymap.set('n', 'za', 'za', { desc = 'Toggle fold under cursor' })
 
 -- Github Copilot
 vim.keymap.set('n', '<M-c>', function()
-  -- Toggle Copilot
-  if vim.g.copilot_enabled == true then
-    vim.g.copilot_enabled = false
-    print 'Copilot Disabled'
-  else
-    vim.g.copilot_enabled = true
-    print 'Copilot Enabled'
-  end
-  vim.cmd 'redrawstatus'
+    -- Toggle Copilot
+    if vim.g.copilot_enabled == true then
+        vim.g.copilot_enabled = false
+        print 'Copilot Disabled'
+    else
+        vim.g.copilot_enabled = true
+        print 'Copilot Enabled'
+    end
+    vim.cmd 'redrawstatus'
 end, { desc = 'Toggle GitHub [C]opilot' })
 
 -- Checkmate.nvim keys
-vim.keymap.set({ 'n' }, '<leader>ta', '<cmd>Checkmate archive<CR>', { desc = 'Archive checked/completed todo items (move to bottom section)' })
+vim.keymap.set({ 'n' }, '<leader>ta', '<cmd>Checkmate archive<CR>',
+    { desc = 'Archive checked/completed todo items (move to bottom section)' })
 vim.keymap.set({ 'n', 'v' }, '<leader>tc', '<cmd>Checkmate check<CR>', { desc = 'Set todo item as checked (done)' })
 vim.keymap.set({ 'n', 'v' }, '<leader>tC', '<cmd>Checkmate uncheck<CR>', { desc = 'Set todo item as unchecked' })
 vim.keymap.set({ 'n', 'v' }, '<leader>tn', '<cmd>Checkmate create<CR>', { desc = 'Create todo item' })
@@ -122,13 +121,61 @@ vim.keymap.set({ 'n', 'v' }, '<leader>tsp', '<cmd>Checkmate toggle on_hold<CR>',
 vim.keymap.set({ 'n', 'v' }, '<leader>tsi', '<cmd>Checkmate toggle in_progress<CR>', { desc = 'Set in progress status' })
 vim.keymap.set({ 'n', 'v' }, '<leader>tsx', '<cmd>Checkmate toggle cancelled<CR>', { desc = 'Set canceled status' })
 -- Metadata
-vim.keymap.set({ 'n' }, '<leader>tv', '<cmd>Checkmate metadata select_value<CR>', { desc = 'Update the value of a metadata tag under the cursor' })
-vim.keymap.set({ 'n' }, '<leader>t]', '<cmd>Checkmate metadata jump_next<CR>', { desc = 'Move cursor to next metadata tag' })
-vim.keymap.set({ 'n' }, '<leader>t[', '<cmd>Checkmate metadata jump_previous<CR>', { desc = 'Move cursor to previous metadata tag' })
+vim.keymap.set({ 'n' }, '<leader>tv', '<cmd>Checkmate metadata select_value<CR>',
+    { desc = 'Update the value of a metadata tag under the cursor' })
+vim.keymap.set({ 'n' }, '<leader>t]', '<cmd>Checkmate metadata jump_next<CR>',
+    { desc = 'Move cursor to next metadata tag' })
+vim.keymap.set({ 'n' }, '<leader>t[', '<cmd>Checkmate metadata jump_previous<CR>',
+    { desc = 'Move cursor to previous metadata tag' })
 -- Quick open my work todo.md from Obsidian
-vim.keymap.set({ 'n' }, '<leader>tow', '<cmd>vsplit ~/Documents/obsidian/Work/todo.md<CR>', { desc = 'Open my workd todo in Obsidian' })
+vim.keymap.set({ 'n' }, '<leader>tow', function()
+    local file_path = vim.fn.expand('~/Documents/obsidian/Work/todo.md')
+
+    -- Create a buffer
+    local buf = vim.api.nvim_create_buf(false, false)
+
+    -- Get editor dimensions
+    local width = vim.o.columns
+    local height = vim.o.lines
+
+    -- Calculate popup size (80% of editor)
+    local win_width = math.floor(width * 0.8)
+    local win_height = math.floor(height * 0.8)
+
+    -- Calculate centered position
+    local row = math.floor((height - win_height) / 2)
+    local col = math.floor((width - win_width) / 2)
+
+    -- Window options
+    local opts = {
+        relative = 'editor',
+        width = win_width,
+        height = win_height,
+        row = row,
+        col = col,
+        style = 'minimal',
+        border = 'rounded',
+    }
+
+    -- Open the floating window
+    local win = vim.api.nvim_open_win(buf, true, opts)
+
+    -- Load the file into the buffer
+    vim.cmd('edit ' .. file_path)
+
+    -- Get the actual buffer number after loading the file
+    local actual_buf = vim.api.nvim_win_get_buf(win)
+
+    -- Set buffer-local keymap to close the popup with 'q'
+    vim.keymap.set('n', 'q', function()
+        if vim.api.nvim_win_is_valid(win) then
+            vim.api.nvim_win_close(win, true)
+        end
+    end, { buffer = actual_buf, noremap = true, silent = true, desc = 'Close popup window' })
+end, { desc = 'Open my workd todo in Obsidian' })
 
 vim.keymap.set('n', '<leader>f', function()
-  vim.lsp.buf.format({ async = true })
-end, {desc='[F]ormat buffer'})
+    vim.lsp.buf.format({ async = true })
+end, { desc = '[F]ormat buffer' })
 vim.keymap.set("i", "<C-space>", vim.lsp.completion.get, { desc = "Trigger autocompletion" })
+
