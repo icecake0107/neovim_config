@@ -7,8 +7,8 @@
 -- The configuration is found in the lsp folder inside the nvim config folder,
 -- so in ~.config/lsp/lua_ls.lua for lua_ls, for example.
 vim.lsp.enable('lua_ls')
+vim.lsp.enable('pyright')
 vim.lsp.enable('ruff')
-vim.lsp.enable('jedi_language_server')
 vim.lsp.enable('vue_ls')
 vim.lsp.enable('vtsls')
 
