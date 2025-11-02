@@ -18,7 +18,7 @@ return {
             bind_to_cwd = true,
             follow_current_file = { enabled = true },
             filtered_items = {
-                hide_gitignored = false, -- This is the default setting
+                hide_gitignored = false,
             },
             window = {
                 mappings = {
