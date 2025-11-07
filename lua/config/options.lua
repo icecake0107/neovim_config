@@ -53,7 +53,8 @@ vim.o.cursorline = true
 -- Enable vertical cursor column highlight
 vim.opt.cursorcolumn = true
 
-vim.opt.textwidth = 110
+vim.opt.textwidth = 0
+vim.opt.formatoptions:remove { 't' }
 
 vim.opt.eol = false
 vim.opt.winborder = 'rounded'
