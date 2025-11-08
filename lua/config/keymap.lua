@@ -41,7 +41,7 @@ vim.keymap.set('n', '<leader>qq', function()
         end
     end
     -- Then save and quit all
-    vim.cmd 'wqa'
+    vim.cmd 'qa!'
 end, { desc = '[Q]uit all (save and quit)' })
 
 vim.keymap.set('n', '<leader>gg', '<cmd>LazyGit<CR>', { desc = 'Open lazygit' })
