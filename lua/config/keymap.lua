@@ -127,10 +127,9 @@ vim.keymap.set({ 'n' }, '<leader>t]', '<cmd>Checkmate metadata jump_next<CR>',
     { desc = 'Move cursor to next metadata tag' })
 vim.keymap.set({ 'n' }, '<leader>t[', '<cmd>Checkmate metadata jump_previous<CR>',
     { desc = 'Move cursor to previous metadata tag' })
--- Quick open my work todo.md from Obsidian
-vim.keymap.set({ 'n' }, '<leader>tow', function()
-    local file_path = vim.fn.expand('~/Documents/obsidian/Work/todo.md')
 
+-- Helper function to open a file in a centered floating window
+local function open_file_in_floating_window(file_path)
     -- Create a buffer
     local buf = vim.api.nvim_create_buf(false, false)
 
@@ -172,6 +171,35 @@ vim.keymap.set({ 'n' }, '<leader>tow', function()
             vim.api.nvim_win_close(win, true)
         end
     end, { buffer = actual_buf, noremap = true, silent = true, desc = 'Close popup window' })
+end
+
+-- Quick open the project todo.md udern the currnt folder/temp, if not exist, create a new one.
+vim.keymap.set({'n'}, '<leader>top', function()
+    -- Get the current working directory and construct the path
+    local cwd = vim.fn.getcwd()
+    local temp_dir = cwd .. '/temp'
+    local file_path = temp_dir .. '/todo.md'
+    
+    -- Create temp directory if it doesn't exist
+    if vim.fn.isdirectory(temp_dir) == 0 then
+        vim.fn.mkdir(temp_dir, 'p')
+    end
+    
+    -- Create the todo.md file if it doesn't exist
+    if vim.fn.filereadable(file_path) == 0 then
+        -- Create empty file
+        vim.fn.writefile({}, file_path)
+    end
+
+    -- Open the file in floating window
+    open_file_in_floating_window(file_path)
+end, { desc = 'Open project todo.md in current folder' })
+-- Quick open my work todo.md from Obsidian
+vim.keymap.set({ 'n' }, '<leader>tow', function()
+    local file_path = vim.fn.expand('~/Documents/obsidian/Work/todo.md')
+    
+    -- Open the file in floating window
+    open_file_in_floating_window(file_path)
 end, { desc = 'Open my workd todo in Obsidian' })
 
 vim.keymap.set('n', '<leader>f', function()

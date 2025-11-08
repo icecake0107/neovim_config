@@ -47,3 +47,4 @@ spell/
 lazy-lock.json
 .stylelua.toml
 .DS_Store
+temp/
