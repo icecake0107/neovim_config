@@ -207,3 +207,31 @@ vim.keymap.set('n', '<leader>f', function()
 end, { desc = '[F]ormat buffer' })
 vim.keymap.set("i", "<C-space>", vim.lsp.completion.get, { desc = "Trigger autocompletion" })
 
+-- Reload current file from disk
+vim.keymap.set('n', '<leader>rf', function()
+    local bufname = vim.api.nvim_buf_get_name(0)
+    
+    -- Check if buffer is linked to a file on disk
+    if bufname == '' or bufname == nil then
+        vim.notify('No file associated with current buffer', vim.log.levels.WARN)
+        return
+    end
+    
+    -- Check if file exists on disk
+    if vim.fn.filereadable(bufname) == 0 then
+        vim.notify('File does not exist on disk: ' .. bufname, vim.log.levels.WARN)
+        return
+    end
+    
+    -- Reload the file
+    vim.cmd('edit!')
+    vim.notify('File reloaded from disk', vim.log.levels.INFO)
+end, { desc = '[R]eload [F]ile from disk' })
+
+-- Reload vim configuration
+vim.keymap.set('n', '<leader>rv', function()
+    -- Source the init.lua file
+    vim.cmd('source ' .. vim.env.MYVIMRC)
+    vim.notify('Vim configuration reloaded!', vim.log.levels.INFO)
+end, { desc = '[R]eload [V]im configuration' })
+
