@@ -2,6 +2,7 @@ return {
     'Vigemus/iron.nvim',
     config = function()
         local iron = require('iron.core')
+        local view = require('iron.view')
 
         iron.setup({
             config = {
@@ -10,35 +11,43 @@ return {
                 -- Your repl definitions come here
                 repl_definition = {
                     python = {
-                        command = { 'python', '--no-autoindent' },
-                        format = require('iron.fts.common').bracketed_paste,
+                        command = { 'python' },
+                        block_dividers = { "# %%", "#%%" },
                     },
                     lua = {
                         command = { 'lua' },
+                        block_dividers = { "-- %%", "#%%" },
                     },
                     javascript = {
                         command = { 'node' },
+                        block_dividers = { "// %%", "#%%" },
                     },
                     typescript = {
                         command = { 'ts-node' },
                     },
                     bash = {
                         command = { 'bash' },
+                        block_dividers = { "# %%", "#%%" },
                     },
                     sh = {
                         command = { 'sh' },
+                        block_dividers = { "# %%", "#%%" },
                     },
                 },
                 -- How the repl window will be displayed
-                repl_open_cmd = require('iron.view').right(78),
+                repl_open_cmd = view.split.vertical.botright(0.5)
             },
             -- Iron doesn't set keymaps by default anymore.
             -- You can set them here or manually add keymaps to the features you want
             keymaps = {
+                toggle_repl = "<space>irr",
                 send_motion = '<leader>isc',
-                visual_send = '<leader>isc',
+                visual_send = '<leader>isv',
                 send_file = '<leader>isf',
                 send_line = '<leader>isl',
+                send_code_block = '<leader>isb',
+                send_code_block_and_move = "<space>isn",
+                send_paragraph = "<space>isp",
                 send_until_cursor = '<leader>su',
                 send_mark = '<leader>ism',
                 mark_motion = '<leader>imc',
@@ -55,10 +64,6 @@ return {
             },
             ignore_blank_lines = true, -- ignore blank lines when sending visual select lines
         })
-
-        -- Additional manual keymaps for REPL management
-        vim.keymap.set('n', '<leader>irs', '<cmd>IronRepl<cr>', { desc = '[R]EPL [S]tart/Focus' })
-        vim.keymap.set('n', '<leader>irr', '<cmd>IronRestart<cr>', { desc = '[R]EPL [R]estart' })
-        vim.keymap.set('n', '<leader>irh', '<cmd>IronHide<cr>', { desc = '[R]EPL [H]ide' })
     end,
 }
+
