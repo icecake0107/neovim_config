@@ -32,10 +32,11 @@ return {
                 indent = true,
                 sign = true,
                 virtual_lines = true,
-                link=true
+                link = true
             },
-            link = { enabled = true, render_modes = { 'n', 'v' } }
         },
+        link = { enabled = true, render_modes = { 'n', 'v' } },
+        latex = {enabled=false}
     },
 }
 
