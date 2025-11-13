@@ -230,8 +230,18 @@ end, { desc = '[R]eload [F]ile from disk' })
 
 -- Reload vim configuration
 vim.keymap.set('n', '<leader>rv', function()
-    -- Source the init.lua file
-    vim.cmd('source ' .. vim.env.MYVIMRC)
-    vim.notify('Vim configuration reloaded!', vim.log.levels.INFO)
+    -- Clear the Lua module cache for config modules (not plugins, as lazy.nvim manages those)
+    for name, _ in pairs(package.loaded) do
+        if name:match('^config') then
+            package.loaded[name] = nil
+        end
+    end
+    
+    -- Manually reload config modules
+    require('config.options')
+    require('config.keymap')
+    require('config.autocmd')
+    
+    vim.notify('Config modules reloaded! (Restart Neovim to reload plugins)', vim.log.levels.INFO)
 end, { desc = '[R]eload [V]im configuration' })
 
