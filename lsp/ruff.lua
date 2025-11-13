@@ -29,15 +29,7 @@
 return {
   cmd = { 'ruff', 'server' },
   filetypes = { 'python' },
-  root_markers = { 'pyproject.toml', 'ruff.toml', '.ruff.toml', '.git' },
-  root_dir = function(filename)
-    -- Don't attach to unnamed buffers
-    if filename == '' or filename == nil then
-      return nil
-    end
-    -- Use root markers to find project root
-    return vim.fs.root(filename, { 'pyproject.toml', 'ruff.toml', '.ruff.toml', '.git' })
-  end,
+  root_markers = { 'pyproject.toml', 'ruff.toml', '.ruff.toml', '.git', 'package.py' },
   settings = {
     indentStyle = "space",
     quoteStyle = "double",
