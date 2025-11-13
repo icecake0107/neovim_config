@@ -40,6 +40,16 @@
 
         -- Toggle line highlighting
         map('n', '<leader>gl', gitsigns.toggle_linehl, { desc = 'Toggle git line highlighting' })
+
+        -- Show git blame for current line
+        map('n', '<leader>gb', function()
+          gitsigns.blame_line { full = true }
+        end, { desc = 'Show git blame for current line' })
+
+        -- Show git blame for selected lines in visual mode
+        map('v', '<leader>gb', function()
+          gitsigns.blame_line { full = true }
+        end, { desc = 'Show git blame for selected lines' })
       end,
     },
   }
