@@ -40,7 +40,8 @@ return {
             -- Iron doesn't set keymaps by default anymore.
             -- You can set them here or manually add keymaps to the features you want
             keymaps = {
-                toggle_repl = "<space>irr",
+                restart_repl = "<leader>irr", -- calls `IronRestart` to restart the repl
+                toggle_repl = "<leader>iri",
                 send_motion = '<leader>isc',
                 visual_send = '<leader>isv',
                 send_file = '<leader>isf',
