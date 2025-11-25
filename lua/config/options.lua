@@ -1,5 +1,8 @@
 -- options
 --------------------------------------------------------------------------------
+-- Disable native 's' to avoid delay with mini.surround (s is same as cl anyway)
+vim.keymap.set({ 'n', 'x' }, 's', '<Nop>')
+
 -- Relative and absolute line numbers combined
 vim.opt.number = true
 vim.opt.relativenumber = true
