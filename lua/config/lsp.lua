@@ -41,13 +41,36 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 -- Diagnostics
 vim.diagnostic.config({
-    -- Use the default configuration
-    -- virtual_lines = true
+    -- Disable virtual_lines to prevent visual line shifting
+    virtual_lines = false,
 
-    -- Alternatively, customize specific options
-    virtual_lines = {
-        -- Only show virtual line diagnostics for the current cursor line
-        current_line = true,
+    -- Show signs in the sign column (gutter)
+    signs = true,
+
+    -- Underline the diagnostic text
+    underline = true,
+
+    -- Don't update diagnostics while typing (less distracting)
+    update_in_insert = false,
+
+    -- Sort diagnostics by severity
+    severity_sort = true,
+
+    -- Disable inline virtual text (optional: set to true if you want end-of-line hints)
+    virtual_text = false,
+
+    -- Float window configuration for on-demand diagnostics
+    float = {
+        border = 'rounded',
+        source = true,
+        header = '',
+        prefix = '',
     },
 })
+
+-- Keymaps to show diagnostics on demand
+vim.keymap.set('n', 'gl', vim.diagnostic.open_float, { desc = 'Show diagnostic in float' })
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic' })
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic' })
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic quickfix list' })
 
