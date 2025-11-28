@@ -245,3 +245,9 @@ vim.keymap.set('n', '<leader>rv', function()
     vim.notify('Config modules reloaded! (Restart Neovim to reload plugins)', vim.log.levels.INFO)
 end, { desc = '[R]eload [V]im configuration' })
 
+-- Copy current buffer file path:
+vim.keymap.set("n", "<leader>by", function()
+    local path = vim.fn.expand("%:p")
+    vim.fn.setreg("+", path)
+    vim.notify("Copied absolute path: " .. path)
+end, { desc = "Copy absolute path to clipboard" })
