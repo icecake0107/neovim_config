@@ -11,6 +11,7 @@ vim.lsp.enable('pyright')
 vim.lsp.enable('ruff')
 vim.lsp.enable('vue_ls')
 vim.lsp.enable('vtsls')
+vim.lsp.enable('clangd')
 
 vim.api.nvim_create_autocmd('LspAttach', {
     callback = function(ev)
