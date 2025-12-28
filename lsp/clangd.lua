@@ -11,6 +11,17 @@
 ---   ```
 --- - clangd relies on a [JSON compilation database](https://clang.llvm.org/docs/JSONCompilationDatabase.html)
 ---   specified as compile_commands.json, see https://clangd.llvm.org/installation#compile_commandsjson
+---
+--- **IMPORTANT:** If you're getting errors about std functions not existing:
+---   Create a `compile_flags.txt` file in your C++ project root with:
+---   ```
+---   -std=c++17
+---   ```
+---   Or for C++20:
+---   ```
+---   -std=c++20
+---   ```
+---   This tells clangd which C++ standard to use and helps it find standard library headers.
 
 -- https://clangd.llvm.org/extensions.html#switch-between-sourceheader
 local function switch_source_header(bufnr, client)
@@ -64,7 +75,16 @@ end
 
 ---@type vim.lsp.Config
 return {
-    cmd = { 'clangd' },
+    cmd = {
+        'clangd',
+        "--query-driver=/usr/bin/g++,/usr/bin/gcc",
+        '--background-index',
+        '--clang-tidy',
+        '--header-insertion=iwyu',
+        '--completion-style=detailed',
+        '--function-arg-placeholders',
+        '--fallback-style=llvm',
+    },
     filetypes = { 'c', 'cc', 'cpp', 'h', 'objc', 'objcpp', 'cuda' },
     root_markers = {
         '.clangd',
