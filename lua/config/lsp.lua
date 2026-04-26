@@ -12,6 +12,7 @@ vim.lsp.enable('ruff')
 vim.lsp.enable('vue_ls')
 vim.lsp.enable('vtsls')
 vim.lsp.enable('clangd')
+vim.lsp.enable('sourcekit')
 
 vim.api.nvim_create_autocmd('LspAttach', {
     callback = function(ev)

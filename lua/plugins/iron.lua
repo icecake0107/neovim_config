@@ -25,6 +25,10 @@ return {
                     typescript = {
                         command = { 'ts-node' },
                     },
+                    swift = {
+                        command = { 'swift', 'repl' },
+                        block_dividers = { "// %%", "//%%" },
+                    },
                     bash = {
                         command = { 'bash' },
                         block_dividers = { "# %%", "#%%" },
