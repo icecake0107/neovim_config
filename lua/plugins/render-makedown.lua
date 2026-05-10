@@ -6,10 +6,10 @@ return {
     ---@module 'render-markdown'
     ---@type render.md.UserConfig
     opts = {
-        render_modes = { 'n', 'c', 't' },
+        render_modes = { 'n', 'v', 'c', 't' },
         anti_conceal = {
             enabled = true,
-            disabled_modes = { 'n' },
+            disabled_modes = {'n', 'v' },
             above = 0,
             below = 0,
             -- Which elements to always show, ignoring anti conceal behavior. Values can either be
