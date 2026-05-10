@@ -43,15 +43,26 @@ return { -- Fuzzy Finder (files, lsp, etc)
 
       -- [[ Configure Telescope ]]
       -- See `:help telescope` and `:help telescope.setup()`
+      local actions = require 'telescope.actions'
+      local action_state = require 'telescope.actions.state'
+
+      -- Wrap select_default to center the cursor line after jumping
+      local function select_and_center(prompt_bufnr)
+        actions.select_default(prompt_bufnr)
+        vim.schedule(function()
+          if action_state.get_selected_entry() ~= nil or vim.api.nvim_get_mode().mode == 'n' then
+            vim.cmd 'normal! zzzv'
+          end
+        end)
+      end
+
       require('telescope').setup {
-        -- You can put your default mappings / updates / etc. in here
-        --  All the info you're looking for is in `:help telescope.setup()`
-        --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
+        defaults = {
+          mappings = {
+            i = { ['<CR>'] = select_and_center },
+            n = { ['<CR>'] = select_and_center },
+          },
+        },
         pickers = {
           colorscheme = {
             enable_preview = true

@@ -32,6 +32,23 @@ vim.keymap.set('n', '<leader>bp', ':bprevious<cr>', { desc = 'Previous buffer' }
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
+-- Center the screen on the cursor line after search jumps
+vim.keymap.set('n', 'n', 'nzzzv', { desc = 'Next search match (centered)' })
+vim.keymap.set('n', 'N', 'Nzzzv', { desc = 'Previous search match (centered)' })
+vim.keymap.set('n', '*', '*zzzv', { desc = 'Search word under cursor forward (centered)' })
+vim.keymap.set('n', '#', '#zzzv', { desc = 'Search word under cursor backward (centered)' })
+vim.keymap.set('n', 'g*', 'g*zzzv', { desc = 'Search partial word forward (centered)' })
+vim.keymap.set('n', 'g#', 'g#zzzv', { desc = 'Search partial word backward (centered)' })
+
+-- Center on the initial search jump after pressing <CR> in / or ?
+vim.keymap.set('c', '<CR>', function()
+    local cmdtype = vim.fn.getcmdtype()
+    if cmdtype == '/' or cmdtype == '?' then
+        return '<CR>zzzv'
+    end
+    return '<CR>'
+end, { expr = true, desc = 'Center screen after initial search' })
+
 -- Save and quit
 vim.keymap.set('n', '<leader>qq', function()
     -- Close all terminal buffers first
