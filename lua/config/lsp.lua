@@ -14,14 +14,13 @@ vim.lsp.enable('vtsls')
 vim.lsp.enable('clangd')
 vim.lsp.enable('sourcekit')
 
+vim.opt.completeopt = { 'menu', 'menuone', 'noinsert', 'fuzzy', 'popup' }
+
 vim.api.nvim_create_autocmd('LspAttach', {
     callback = function(ev)
         local client = vim.lsp.get_client_by_id(ev.data.client_id)
+        if not client then return end
         if client:supports_method('textDocument/completion') then
-            vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
-        end
-        if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_completion) then
-            vim.opt.completeopt = { 'menu', 'menuone', 'noinsert', 'fuzzy', 'popup' }
             vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
         end
         local map = function(keys, func, desc, mode)
@@ -72,7 +71,11 @@ vim.diagnostic.config({
 
 -- Keymaps to show diagnostics on demand
 vim.keymap.set('n', 'gl', vim.diagnostic.open_float, { desc = 'Show diagnostic in float' })
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic' })
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic' })
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic quickfix list' })
+vim.keymap.set('n', '[d', function()
+    vim.diagnostic.jump({ count = -1, float = true })
+end, { desc = 'Go to previous diagnostic' })
+vim.keymap.set('n', ']d', function()
+    vim.diagnostic.jump({ count = 1, float = true })
+end, { desc = 'Go to next diagnostic' })
+vim.keymap.set('n', '<leader>xq', vim.diagnostic.setloclist, { desc = 'Open diagnostic quickfix list' })
 
