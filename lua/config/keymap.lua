@@ -48,7 +48,6 @@ vim.keymap.set('n', '<leader>gg', '<cmd>LazyGit<CR>', { desc = 'Open lazygit' })
 
 -- Toggle between color themes
 vim.keymap.set('n', '<leader>ub', function()
-    local current_colorscheme = vim.g.colors_name
     if vim.o.background == 'light' then
         vim.o.background = 'dark'
     else
@@ -71,29 +70,6 @@ vim.keymap.set('n', '<S-Up>', '<C-w>+', { desc = 'Increase window height' })
 vim.keymap.set('n', '<S-Down>', '<C-w>-', { desc = 'Decrease window height' })
 vim.keymap.set('n', '<S-Left>', '<C-w><', { desc = 'Decrease window width' })
 vim.keymap.set('n', '<S-Right>', '<C-w>>', { desc = 'Increase window width' })
-
--- Folding keymaps
-vim.keymap.set('n', 'zR', function()
-    -- Try nvim-ufo first, fallback to default
-    if pcall(require, 'ufo') then
-        require('ufo').openAllFolds()
-    else
-        vim.cmd 'normal! zR'
-    end
-end, { desc = 'Open all folds' })
-vim.keymap.set('n', 'zM', function()
-    -- Try nvim-ufo first, fallback to default
-    if pcall(require, 'ufo') then
-        require('ufo').closeAllFolds()
-    else
-        vim.cmd 'normal! zM'
-    end
-end, { desc = 'Close all folds' })
-vim.keymap.set('n', 'zr', 'zr', { desc = 'Open one fold level' })
-vim.keymap.set('n', 'zm', 'zm', { desc = 'Close one fold level' })
-vim.keymap.set('n', 'zo', 'zo', { desc = 'Open fold under cursor' })
-vim.keymap.set('n', 'zc', 'zc', { desc = 'Close fold under cursor' })
-vim.keymap.set('n', 'za', 'za', { desc = 'Toggle fold under cursor' })
 
 -- Github Copilot
 vim.keymap.set('n', '<M-c>', function()

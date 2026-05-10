@@ -56,7 +56,7 @@ return {
                 send_until_cursor = '<leader>su',
                 send_mark = '<leader>ism',
                 mark_motion = '<leader>imc',
-                mark_visual = '<leader>imc',
+                mark_visual = '<leader>imv',
                 remove_mark = '<leader>imd',
                 cr = '<leader>is<cr>',
                 interrupt = '<leader>is<space>',
