@@ -10,8 +10,11 @@ vim.opt.relativenumber = true
 -- Keep signcolumn on by default
 vim.opt.signcolumn = 'yes'
 
--- Cursorline
+-- Show which line your cursor is on
 vim.opt.cursorline = true
+
+-- Minimal number of screen lines to keep above and below the cursor.
+vim.opt.scrolloff = 10
 
 -- Show whitespace characters
 vim.opt.list = true
