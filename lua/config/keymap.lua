@@ -205,8 +205,6 @@ end, { desc = 'Open my workd todo in Obsidian' })
 vim.keymap.set('n', '<leader>f', function()
     vim.lsp.buf.format({ async = true })
 end, { desc = '[F]ormat buffer' })
-vim.keymap.set("i", "<C-space>", vim.lsp.completion.get, { desc = "Trigger autocompletion" })
-
 -- Reload current file from disk
 vim.keymap.set('n', '<leader>rf', function()
     local bufname = vim.api.nvim_buf_get_name(0)
