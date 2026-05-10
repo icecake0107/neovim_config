@@ -54,8 +54,10 @@ vim.opt.splitbelow = true
 -- Save undo history
 vim.opt.undofile = true
 
--- Set the default border for all floating windows
-vim.opt.winborder = 'rounded'
+-- Default border for floats (Nvim 0.11+); skip if editor is older (e.g. LazyGit's nvim on PATH)
+if vim.fn.exists('+winborder') == 1 then
+    vim.opt.winborder = 'rounded'
+end
 
 -- Enable break indent
 vim.o.breakindent = true
@@ -73,7 +75,6 @@ vim.opt.textwidth = 0
 vim.opt.formatoptions:remove { 't' }
 
 vim.opt.eol = false
-vim.opt.winborder = 'rounded'
 
 -- indentation
 vim.opt.smarttab = true
