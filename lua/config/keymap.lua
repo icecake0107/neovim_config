@@ -63,6 +63,16 @@ end, { desc = '[Q]uit all (save and quit)' })
 
 vim.keymap.set('n', '<leader>gg', '<cmd>LazyGit<CR>', { desc = 'Open lazygit' })
 
+vim.keymap.set('n', '<leader>dd', function()
+    local view = require('diffview.lib').get_current_view()
+    if view then
+        vim.cmd 'DiffviewClose'
+    else
+        vim.cmd 'DiffviewOpen'
+    end
+end, { desc = '[D]iffview toggle' })
+vim.keymap.set('n', '<leader>Dh', '<cmd>DiffviewFileHistory<CR>', { desc = '[D]iffview file [H]istory' })
+
 -- Toggle between color themes
 vim.keymap.set('n', '<leader>ub', function()
     if vim.o.background == 'light' then
