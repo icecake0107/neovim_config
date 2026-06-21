@@ -20,7 +20,7 @@ return {
     keys = {
         -- Send file path + cursor line + visual selection (automatically formatted)
         {
-            "<leader>aT",
+            "<leader>aS",
             function()
                 require("wiremux").send("@{this}", { target = "cursor_agent", post_keys = "C-j" })
             end,
@@ -30,7 +30,7 @@ return {
 
         -- Toggle visibility of the cursor agent pane
         {
-            "<leader>aA",
+            "<leader>aT",
             function()
                 require("wiremux").toggle({
                     target = "cursor_agent"
