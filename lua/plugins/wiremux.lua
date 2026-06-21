@@ -5,12 +5,18 @@ return {
         "folke/snacks.nvim", -- optional
     },
     opts = {
+        picker = {
+            adapter = "fzf-lua",
+            instances = {
+            filter = nil,
+          },
+        },
         targets = {
             definitions = {
                 -- Define your Cursor agent CLI target here
-                cursor_agent = {
+                cursor = {
                     cmd = "agent",        -- Replace with the exact command you use to launch the agent
-                    kind = { "pane" },
+                    kind = "pane",
                     split = "horizontal", -- Opens side-by-side
                     shell = false,        -- Set to true if you need to run it inside a shell environment
                 },
@@ -22,7 +28,7 @@ return {
         {
             "<leader>aS",
             function()
-                require("wiremux").send("@{this}", { target = "cursor_agent", post_keys = "C-j" })
+                require("wiremux").send("@{this}", { target = "cursor",behavior = "last", post_keys = "C-j" })
             end,
             mode = { "n", "x" },
             desc = "Send context to Cursor agent"
@@ -33,7 +39,7 @@ return {
             "<leader>aT",
             function()
                 require("wiremux").toggle({
-                    target = "cursor_agent"
+                    target = "cursor"
                 })
             end,
             desc = "Toggle Cursor Agent Pane"
@@ -44,8 +50,8 @@ return {
             "<leader>aP",
             function()
                 require("wiremux").send({
-                    { label = "Explain this",   value = "Explain {this}",                post_keys = "C-j" },
-                    { label = "Review changes", value = "Review my changes:\n{changes}", post_keys = "C-j" },
+                    { label = "Explain this",   value = "Explain {this}",behavior = "last", post_keys = "C-j" },
+                    { label = "Review changes", value = "Review my changes:\n{changes}",behavior = "last", post_keys = "C-j" },
                 })
             end,
             desc = "Toggle Cursor Agent Pane"
