@@ -158,7 +158,7 @@ return {
     local aerial = require('aerial')
 
     -- Toggle the aerial window with <leader>a
-    vim.keymap.set('n', '<leader>a', '<cmd>AerialToggle!<CR>', { desc = 'Toggle Aerial' })
+    vim.keymap.set('n', '<leader>aa', '<cmd>AerialToggle!<CR>', { desc = 'Toggle Aerial' })
 
     -- Optional additional keymaps
     vim.keymap.set('n', '<leader>an', '<cmd>AerialNavToggle<CR>', { desc = 'Aerial Nav Toggle' })
