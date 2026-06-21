@@ -108,3 +108,14 @@ vim.opt.foldcolumn = '0' -- '0' is not bad
 vim.opt.foldmethod = 'expr'
 vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 vim.opt.foldtext = ''
+
+-- Tabline
+local function set_tabline_hl()
+  vim.api.nvim_set_hl(0, 'TabLineSel', { bg = '#2563eb', bold = true })
+end
+
+set_tabline_hl()
+vim.api.nvim_create_autocmd('ColorScheme', {
+  group = vim.api.nvim_create_augroup('TablineHl', { clear = true }),
+  callback = set_tabline_hl,
+})

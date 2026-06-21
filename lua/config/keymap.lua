@@ -252,3 +252,8 @@ vim.keymap.set("n", "<leader>by", function()
     vim.fn.setreg("+", path)
     vim.notify("Copied absolute path: " .. path)
 end, { desc = "Copy absolute path to clipboard" })
+
+-- Tab keys
+vim.keymap.set('n', '<C-t>', function()
+  vim.cmd.tabnew()
+end, { desc = 'New tab' })
