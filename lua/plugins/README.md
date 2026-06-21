@@ -14,6 +14,7 @@ This directory contains all the plugin specifications loaded by [`lazy.nvim`](ht
 - [Markdown & Notes](#markdown--notes)
 - [REPL & HTTP](#repl--http)
 - [Productivity](#productivity)
+- [Integrations](#integrations)
 
 ## Quick Reference
 
@@ -33,13 +34,15 @@ This directory contains all the plugin specifications loaded by [`lazy.nvim`](ht
 | `nvim-dap` + `nvim-dap-ui` + `nvim-dap-python` | `dap.lua` | Debug Adapter Protocol client, UI, and Python (debugpy) integration |
 | `gitsigns.nvim` | `gitsigns.lua` | Git diff signs in the gutter |
 | `lazygit.nvim` | `lazygit.lua` | Lazygit terminal UI integration |
+| `diffview.nvim` | `diffview.lua` | Side-by-side diff & merge tool view |
 | `todo-comments.nvim` | `todo-comments.lua` | Highlight & search TODO/FIX/HACK comments |
 | `nvim-ufo` | `ufo.lua` | Modern code folding |
-| `render-markdown.nvim` | `render-makerdown.lua` | In-buffer markdown rendering |
+| `render-markdown.nvim` | `render-makedown.lua` | In-buffer markdown rendering |
 | `obsidian.nvim` | `obsidian.lua` | Obsidian vault integration |
 | `checkmate.nvim` | `checkmate.lua` | Markdown todo lists with custom states |
 | `iron.nvim` | `iron.lua` | REPL integration (Python, Lua, Node, etc.) |
 | `kulala.nvim` | `kulala.lua` | HTTP client for `.http` / `.rest` files |
+| `wiremux.nvim` | `wiremux.lua` | Send buffer context to the Cursor agent CLI |
 
 ---
 
@@ -104,7 +107,7 @@ Symbol outline window (treesitter → lsp → markdown → man backends). Opens 
 
 | Key | Action |
 |-----|--------|
-| `<leader>a` | Toggle Aerial |
+| `<leader>aa` | Toggle Aerial |
 | `<leader>an` | Toggle Aerial Nav floating window |
 | `<leader>ao` / `<leader>ac` | Open / close all symbols |
 | `{` / `}` (in attached buf) | Prev / next symbol |
@@ -209,6 +212,9 @@ Git diff signs in the gutter (`+`, `~`, `_`, `‾`). Line-highlighting and word-
 ### `lazygit.lua` — lazygit.nvim
 Bare spec installing [kdheepak/lazygit.nvim](https://github.com/kdheepak/lazygit.nvim). Provides the `:LazyGit` command (no custom keymap defined here).
 
+### `diffview.lua` — diffview.nvim
+Bare spec installing [sindrets/diffview.nvim](https://github.com/sindrets/diffview.nvim). Provides the `:DiffviewOpen`, `:DiffviewFileHistory`, and related commands for a tabbed side-by-side diff / merge-conflict view (no custom `opts` or keymaps defined here).
+
 ---
 
 ## Language & Syntax
@@ -220,7 +226,7 @@ Runs `:TSUpdate` on install. Pre-installs parsers for: `bash`, `c`, `cpp`, `css`
 
 ## Markdown & Notes
 
-### `render-makerdown.lua` — render-markdown.nvim
+### `render-makedown.lua` — render-markdown.nvim
 In-buffer markdown rendering (headings, code blocks, links, etc.).
 
 - Renders in `n`, `c`, `t` modes
@@ -296,10 +302,24 @@ Highlights and searches TODO-style comments. Loaded on `VimEnter`. Recognized ke
 
 ---
 
+## Integrations
+
+### `wiremux.lua` — wiremux.nvim
+Bridges Neovim with the [Cursor](https://cursor.com) agent CLI via [MSmaili/wiremux.nvim](https://github.com/MSmaili/wiremux.nvim). Optional deps: `fzf-lua`, `snacks.nvim`. Defines a `cursor_agent` target that launches the `agent` command in a horizontal split pane (`shell = false`).
+
+| Key | Mode | Action |
+|-----|------|--------|
+| `<leader>aT` | n / x | Send `{this}` context (file path + cursor line + visual selection) to the Cursor agent |
+| `<leader>aA` | n | Toggle the Cursor agent pane |
+
+> Note: `<leader>aT` / `<leader>aA` share the `<leader>a` prefix with Aerial (`<leader>aa`/`an`/`ao`/`ac`) but use distinct trailing keys, so there is no conflict.
+
+---
+
 ## Notes
 
 - Most specs use `lazy.nvim`'s lazy-loading hooks (`event`, `ft`, `keys`) to keep startup snappy.
 - `colortheme.lua` and `snacks.lua` use `priority = 1000` to ensure they load early.
 - The Copilot indicator in the statusline lives in `mini.lua` and reads `vim.g.copilot_enabled` set by `copilot.lua`.
 - Aerial integrates with both Telescope (extension) and the statusline (breadcrumb) — both wired up from their respective files.
-- `render-makerdown.lua` is a typo for "render-markdown" but the file itself is fine; rename if you'd like consistency.
+- `render-makedown.lua` is a misspelling of "render-markdown" but the file itself is fine; rename if you'd like consistency.
