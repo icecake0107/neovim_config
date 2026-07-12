@@ -72,6 +72,7 @@ return  { -- Collection of various small independent plugins/modules
       end
 
       local default_section_fileinfo = statusline.section_fileinfo
+      local wiremux_component
       statusline.section_fileinfo = function(...)
         local fileinfo = default_section_fileinfo(...)
 
@@ -93,11 +94,22 @@ return  { -- Collection of various small independent plugins/modules
         local indicator_text = string.format('%s %s', icon, enabled and 'ON' or 'OFF')
         local indicator = string.format('%%#%s# %s %%#MiniStatuslineFileinfo#', enabled and 'MiniStatuslineCopilotOn' or 'MiniStatuslineCopilotOff', indicator_text)
 
-        if fileinfo ~= '' then
-          return string.format('%s %s', indicator, fileinfo)
+        if not wiremux_component then
+          local ok, wiremux = pcall(require, 'wiremux')
+          if ok then
+            wiremux_component = wiremux.statusline.component()
+          end
         end
+        local wiremux_text = wiremux_component and wiremux_component() or ''
 
-        return indicator
+        local parts = { indicator }
+        if wiremux_text ~= '' then
+          table.insert(parts, wiremux_text)
+        end
+        if fileinfo ~= '' then
+          table.insert(parts, fileinfo)
+        end
+        return table.concat(parts, ' ')
       end
 
       -- ... and there is more!

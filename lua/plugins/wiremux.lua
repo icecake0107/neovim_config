@@ -45,6 +45,15 @@ return {
             desc = "Toggle Cursor Agent Pane"
         },
 
+        -- Adopt an existing tmux pane as the cursor target
+        {
+            "<leader>aA",
+            function()
+                require("wiremux").adopt({ target = "cursor" })
+            end,
+            desc = "Adopt pane as Cursor agent"
+        },
+
         -- Pass a list of items to get a menu:
         {
             "<leader>aP",
