@@ -8,8 +8,11 @@ return { -- You can easily change to a different colorscheme.
     config = function()
       ---@diagnostic disable-next-line: missing-fields
       require('tokyonight').setup {
+        transparent = true,
         styles = {
           comments = { italic = false }, -- Disable italics in comments
+          sidebars = 'transparent',
+          floats = 'transparent',
         },
       }
 
@@ -17,43 +20,5 @@ return { -- You can easily change to a different colorscheme.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
       vim.cmd.colorscheme 'tokyonight'
-
-      -- Respect the terminal's (transparent) background by clearing the
-      -- background of common highlight groups. Reapplied on every colorscheme
-      -- change so it survives reloads.
-      local function make_transparent()
-        local groups = {
-          'Normal',
-          'NormalNC',
-          'NormalFloat',
-          'FloatBorder',
-          'FloatTitle',
-          'SignColumn',
-          'LineNr',
-          'CursorLineNr',
-          'EndOfBuffer',
-          'MsgArea',
-          'TabLine',
-          'TabLineFill',
-          'StatusLine',
-          'StatusLineNC',
-          'WinBar',
-          'WinBarNC',
-          'Folded',
-          'FoldColumn',
-          'NonText',
-          'WinSeparator',
-        }
-        for _, group in ipairs(groups) do
-          vim.api.nvim_set_hl(0, group, { bg = 'none', ctermbg = 'none' })
-        end
-      end
-
-      vim.api.nvim_create_autocmd('ColorScheme', {
-        group = vim.api.nvim_create_augroup('TransparentBackground', { clear = true }),
-        callback = make_transparent,
-      })
-
-      make_transparent()
     end,
   }
